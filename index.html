@@ -136,7 +136,7 @@
             background-color: var(--bg);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 20px 16px 100px;
+            padding: 12px 12px 100px;
             transition: background 0.8s ease, color 0.5s ease;
             position: relative;
             overflow-x: hidden;
@@ -311,33 +311,34 @@
             background: var(--card-bg);
             backdrop-filter: blur(var(--glass-blur));
             border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 6px;
             box-shadow: 0 8px 32px var(--shadow-color);
             transition: all 0.3s;
         }
+
         .dossier-compact {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
         }
         .dossier-avatar-small {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             border: 2px solid var(--accent-primary);
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 14px var(--accent-glow);
             overflow: hidden;
             flex-shrink: 0;
             background: var(--input-bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 16px;
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.3s;
@@ -354,20 +355,21 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s;
-            font-size: 18px;
-            border-radius: 14px;
+            font-size: 12px;
+            border-radius: 10px;
         }
         .dossier-avatar-small:hover .upload-overlay { opacity: 1; }
+
         .dossier-info {
             flex: 1;
             display: flex;
             flex-wrap: wrap;
-            gap: 4px 12px;
+            gap: 2px 6px;
             align-items: center;
         }
         .dossier-info .name-group {
             display: flex;
-            gap: 4px;
+            gap: 2px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -376,123 +378,132 @@
             border: none;
             border-bottom: 1px dashed var(--card-border);
             color: var(--text-main);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
-            padding: 2px 4px;
-            min-width: 60px;
-            max-width: 120px;
+            padding: 1px 3px;
+            min-width: 36px;
+            max-width: 70px;
             outline: none;
             transition: border-color 0.3s;
         }
         .dossier-info .name-group input:focus { border-bottom-color: var(--accent-primary); }
-        .dossier-info .name-group input::placeholder { color: var(--text-muted); font-weight: 400; font-size: 12px; }
+        .dossier-info .name-group input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 9px;
+        }
         .dossier-info .meta-group {
             display: flex;
-            gap: 6px;
+            gap: 3px;
             align-items: center;
             flex-wrap: wrap;
         }
         .dossier-info .meta-group input {
             background: var(--input-bg);
             border: 1px solid var(--input-border);
-            border-radius: 6px;
+            border-radius: 4px;
             color: var(--text-main);
-            padding: 2px 8px;
-            font-size: 12px;
-            width: 70px;
+            padding: 1px 5px;
+            font-size: 9px;
+            width: 44px;
             outline: none;
             transition: border-color 0.3s;
         }
         .dossier-info .meta-group input:focus { border-color: var(--accent-primary); }
-        .dossier-info .meta-group input::placeholder { color: var(--text-muted); font-size: 10px; }
-        .dossier-info .meta-group .separator { color: var(--text-muted); font-size: 12px; }
+        .dossier-info .meta-group input::placeholder { color: var(--text-muted); font-size: 8px; }
+        .dossier-info .meta-group .separator { color: var(--text-muted); font-size: 9px; }
 
         .header-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
-            padding-top: 8px;
+            gap: 4px;
+            padding-top: 4px;
             border-top: 1px solid var(--card-border);
         }
         .header-controls .left-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             flex-wrap: wrap;
         }
         .header-controls .right-group {
             display: flex;
-            gap: 6px;
+            gap: 3px;
             align-items: center;
             flex-wrap: wrap;
         }
         .streak-badge {
             background: linear-gradient(135deg, #f59e0b, #ef4444);
             color: #fff;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 1px 7px;
+            border-radius: 14px;
             font-weight: 800;
-            font-size: 12px;
+            font-size: 9px;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            box-shadow: 0 4px 15px rgba(245,158,11,0.3);
+            gap: 2px;
+            box-shadow: 0 2px 10px rgba(245,158,11,0.3);
         }
         .btn-action {
             background: var(--input-bg);
             border: 1px solid var(--card-border);
             color: var(--text-main);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 9px;
             cursor: pointer;
             transition: all 0.3s;
             white-space: nowrap;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
         .btn-action:hover { border-color: var(--text-muted); }
         .btn-action.danger:hover { border-color: var(--danger); color: var(--danger); }
         .btn-action.pdf:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
-        .date-display { font-size: 12px; color: var(--text-muted); }
+        .date-display { font-size: 9px; color: var(--text-muted); }
 
         /* ===================================================================
-           NAVIGATION
+           NAVIGATION — МАЛЕНЬКИЕ ВКЛАДКИ
            =================================================================== */
         .nav-menu {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            background: var(--card-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--card-border);
-            padding: 6px;
-            border-radius: 16px;
-            margin-bottom: 24px;
+            gap: 3px;
+            background: transparent;
+            padding: 0;
+            margin-bottom: 10px;
+            border: none;
             position: sticky;
-            top: 16px;
+            top: 4px;
             z-index: 100;
-            box-shadow: 0 4px 20px var(--shadow-color);
         }
         .nav-item {
-            flex: 1;
             background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-size: 13px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-size: 9px;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
             transition: all 0.3s;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
         }
         .nav-item.active {
             background: var(--accent-primary);
             color: #fff;
-            box-shadow: 0 4px 16px var(--accent-glow);
+            box-shadow: 0 2px 10px var(--accent-glow);
         }
-        .nav-item:hover:not(.active) { background: var(--input-bg); }
+        .nav-item:hover:not(.active) {
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
 
         /* ===================================================================
            SECTIONS
@@ -500,7 +511,7 @@
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -512,8 +523,8 @@
             backdrop-filter: blur(var(--glass-blur));
             border: 2px solid var(--accent-primary);
             box-shadow: 0 0 40px var(--accent-glow), 0 8px 32px var(--shadow-color);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 16px;
+            padding: 18px;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
@@ -537,36 +548,43 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
             border-bottom: 1px solid var(--card-border);
         }
+
+        /* ---------- ПОЛЯ ВВОДА (СКРЫВАЮТСЯ ПОСЛЕ СОХРАНЕНИЯ) ---------- */
+        .fields-wrapper {
+            display: block;
+            transition: all 0.3s ease;
+        }
+        .fields-wrapper.hidden {
+            display: none !important;
+        }
+
         .section-title {
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 800;
             color: var(--accent-primary);
-            margin: 20px 0 12px 0;
+            margin: 14px 0 8px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-left: 3px solid var(--accent-primary);
-            padding-left: 10px;
+            padding-left: 8px;
         }
-        .field-group { margin-bottom: 16px; }
+        .field-group { margin-bottom: 10px; }
         .label-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
         }
         .field-group label {
-            font-size: 12px;
+            font-size: 9px;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
-        }
-        .field-group.disabled {
-            opacity: 0.6;
-            pointer-events: none;
+            letter-spacing: 0.3px;
         }
         .field-group textarea,
         .field-group input[type="text"],
@@ -574,94 +592,123 @@
             width: 100%;
             background: var(--input-bg);
             border: 1px solid var(--input-border);
-            border-radius: 12px;
+            border-radius: 8px;
             color: var(--text-main);
-            padding: 12px;
-            font-size: 14px;
+            padding: 6px 10px;
+            font-size: 12px;
             outline: none;
             transition: border-color 0.3s, background 0.3s;
         }
         .field-group textarea:focus,
         .field-group input[type="text"]:focus {
             border-color: var(--accent-primary);
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 14px var(--accent-glow);
         }
-        .field-group textarea { resize: vertical; min-height: 55px; }
+        .field-group textarea { resize: vertical; min-height: 38px; }
         .field-group textarea:disabled,
         .field-group input:disabled,
         .field-group select:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        .btn-mic {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid var(--accent-primary);
+            color: var(--text-main);
+            padding: 1px 7px;
+            border-radius: 5px;
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.3s;
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .btn-mic:hover { background: var(--accent-primary); color: #fff; }
+        .btn-mic.recording {
+            background: var(--danger) !important;
+            color: #fff !important;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+            100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
         }
 
         .energy-range {
             width: 100%;
-            height: 8px;
+            height: 5px;
             background: var(--input-bg);
-            border-radius: 12px;
+            border-radius: 8px;
             outline: none;
             accent-color: var(--accent-primary);
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 3px;
             transition: all 0.3s;
         }
         .energy-range:disabled { opacity: 0.5; cursor: not-allowed; }
         .energy-range::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             background: var(--accent-primary);
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 14px var(--accent-glow);
             cursor: pointer;
         }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         @media (max-width: 500px) { .grid-2 { grid-template-columns: 1fr; } }
 
-        /* ---------- ДЕНЬ ЗАБЛОКИРОВАН (BANNER) ---------- */
+        /* ---------- БАННЕР: ДЕНЬ ЗАПОЛНЕН ---------- */
         .day-locked-banner {
             background: linear-gradient(135deg, var(--success), #059669);
-            border-radius: 16px;
-            padding: 16px 20px;
+            border-radius: 12px;
+            padding: 14px 16px;
             color: #fff;
             display: none;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 0;
+        }
+        .day-locked-banner.visible {
+            display: flex;
         }
         .day-locked-banner .info {
             display: flex;
             flex-direction: column;
             gap: 2px;
-            font-size: 14px;
+            font-size: 12px;
         }
         .day-locked-banner .info .date {
             font-weight: 800;
-            font-size: 16px;
+            font-size: 14px;
         }
         .day-locked-banner .info .stats {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
-            font-size: 13px;
+            font-size: 11px;
             opacity: 0.9;
+        }
+        .day-locked-banner .info .stats .label {
+            opacity: 0.7;
         }
         .day-locked-banner .actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
         .day-locked-banner .actions button {
             background: rgba(255,255,255,0.2);
             border: none;
             color: #fff;
-            padding: 6px 14px;
-            border-radius: 10px;
+            padding: 4px 12px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.3s;
             backdrop-filter: blur(4px);
@@ -677,12 +724,12 @@
             border: none;
             color: #fff;
             font-weight: 800;
-            font-size: 16px;
-            padding: 16px;
-            border-radius: 12px;
+            font-size: 13px;
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(16,185,129,0.3);
-            margin-top: 20px;
+            margin-top: 14px;
             transition: all 0.3s;
             position: relative;
         }
@@ -702,75 +749,73 @@
            =================================================================== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
         }
         .stat-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 10px;
+            padding: 10px;
             text-align: center;
             backdrop-filter: blur(var(--glass-blur));
             transition: all 0.3s;
         }
-        .stat-card h3 { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
-        .stat-card .value { font-size: 28px; font-weight: 800; color: var(--accent-primary); }
+        .stat-card h3 { font-size: 8px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 20px; font-weight: 800; color: var(--accent-primary); }
 
-        /* ---------- INSIGHTS ---------- */
         .insights-container {
-            margin-bottom: 24px;
+            margin-bottom: 14px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 12px 14px;
             backdrop-filter: blur(var(--glass-blur));
         }
         .insights-container h2 {
-            font-size: 14px;
+            font-size: 10px;
             color: var(--accent-primary);
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .insight-item {
-            padding: 8px 0;
+            padding: 4px 0;
             border-bottom: 1px solid var(--card-border);
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 11px;
+            line-height: 1.4;
         }
         .insight-item:last-child { border-bottom: none; }
-        .insight-item .emoji { margin-right: 8px; }
 
         .charts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 14px;
         }
         .chart-box {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 10px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             backdrop-filter: blur(var(--glass-blur));
         }
-        .chart-box h2 { font-size: 14px; margin-bottom: 12px; color: var(--accent-primary); width: 100%; }
-        .donut-wrapper { position: relative; width: 100%; max-width: 200px; height: 200px; }
+        .chart-box h2 { font-size: 10px; margin-bottom: 6px; color: var(--accent-primary); width: 100%; }
+        .donut-wrapper { position: relative; width: 100%; max-width: 140px; height: 140px; }
 
         /* ===================================================================
            SUBTABS
            =================================================================== */
         .subtabs-nav {
             display: flex;
-            gap: 8px;
+            gap: 4px;
             overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
             scrollbar-width: none;
         }
         .subtabs-nav::-webkit-scrollbar { display: none; }
@@ -778,9 +823,9 @@
             background: var(--input-bg);
             border: 1px solid var(--card-border);
             color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 9px;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
@@ -797,35 +842,35 @@
         .history-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
         }
         .archive-item,
         .history-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 12px 14px;
-            font-size: 13px;
-            line-height: 1.5;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+            line-height: 1.4;
             backdrop-filter: blur(var(--glass-blur));
         }
         .archive-item-date,
         .history-date {
-            font-size: 11px;
+            font-size: 9px;
             color: var(--accent-primary);
             font-weight: 800;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .search-box {
             width: 100%;
             background: var(--input-bg);
             border: 1px solid var(--input-border);
-            border-radius: 12px;
+            border-radius: 8px;
             color: var(--text-main);
-            padding: 8px 14px;
-            font-size: 13px;
+            padding: 5px 10px;
+            font-size: 11px;
             outline: none;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             transition: border-color 0.3s;
         }
         .search-box:focus { border-color: var(--accent-primary); }
@@ -836,15 +881,15 @@
         .settings-group {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
             backdrop-filter: blur(var(--glass-blur));
         }
         .settings-group h3 {
-            font-size: 14px;
+            font-size: 11px;
             color: var(--accent-primary);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -852,42 +897,43 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 5px 0;
             border-bottom: 1px solid var(--card-border);
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 4px;
         }
         .settings-group .setting-row:last-child { border-bottom: none; }
         .settings-group .setting-row label {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-main);
         }
         .settings-group .setting-row .hint {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--text-muted);
         }
         .settings-group input[type="time"],
         .settings-group select {
             background: var(--input-bg);
             border: 1px solid var(--input-border);
-            border-radius: 8px;
+            border-radius: 6px;
             color: var(--text-main);
-            padding: 4px 10px;
-            font-size: 13px;
+            padding: 2px 8px;
+            font-size: 11px;
             outline: none;
         }
         .settings-group input[type="time"]:focus,
         .settings-group select:focus { border-color: var(--accent-primary); }
         .settings-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             accent-color: var(--accent-primary);
             cursor: pointer;
         }
         .settings-group .btn-action {
-            padding: 6px 16px;
-            font-size: 13px;
+            padding: 4px 12px;
+            font-size: 11px;
+            height: 28px;
         }
 
         /* ===================================================================
@@ -895,20 +941,20 @@
            =================================================================== */
         @media (max-width: 580px) {
             .dossier-compact { flex-wrap: wrap; }
-            .dossier-info .name-group input { max-width: 80px; font-size: 13px; }
-            .dossier-info .meta-group input { width: 60px; }
-            .header-controls { flex-direction: column; align-items: stretch; gap: 6px; }
+            .dossier-info .name-group input { max-width: 60px; font-size: 11px; }
+            .dossier-info .meta-group input { width: 40px; }
+            .header-controls { flex-direction: column; align-items: stretch; gap: 4px; }
             .header-controls .left-group,
             .header-controls .right-group { justify-content: center; }
             .day-locked-banner { flex-direction: column; align-items: stretch; text-align: center; }
             .day-locked-banner .actions { justify-content: center; }
         }
         @media (max-width: 480px) {
-            .today-card { padding: 16px; }
+            .today-card { padding: 14px; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
-            .chart-box { padding: 12px; }
-            .donut-wrapper { max-width: 160px; height: 160px; }
-            .pin-box { padding: 20px; }
+            .chart-box { padding: 8px; }
+            .donut-wrapper { max-width: 120px; height: 120px; }
+            .pin-box { padding: 16px; }
         }
 
         /* ---------- PDF HIDDEN ELEMENTS ---------- */
@@ -946,9 +992,9 @@
 
                 <div class="dossier-info">
                     <div class="name-group">
-                        <input type="text" id="user-lastname" placeholder="Фамилия" onchange="ProfileManager.save()">
+                        <input type="text" id="user-lastname" placeholder="Фам." onchange="ProfileManager.save()">
                         <input type="text" id="user-firstname" placeholder="Имя" onchange="ProfileManager.save()">
-                        <input type="text" id="user-middlename" placeholder="Отчество" onchange="ProfileManager.save()">
+                        <input type="text" id="user-middlename" placeholder="Отч." onchange="ProfileManager.save()">
                     </div>
                     <div class="meta-group">
                         <input type="text" id="user-city" placeholder="Город" onchange="ProfileManager.save()">
@@ -961,7 +1007,7 @@
             <div class="header-controls">
                 <div class="left-group">
                     <span class="date-display" id="today-date-display">📅 Сегодня: --.--.----</span>
-                    <div class="streak-badge">🔥 <span id="streak-count">0</span> дн.</div>
+                    <div class="streak-badge">🔥 <span id="streak-count">0</span></div>
                 </div>
                 <div class="right-group">
                     <button class="btn-action pdf" onclick="PDFExport.export()">📄 PDF</button>
@@ -985,8 +1031,8 @@
         <section id="sec-today" class="page-section active">
             <div class="today-card">
                 <div class="today-card-header">
-                    <span style="background: var(--accent-primary); color:#fff; font-weight:800; font-size:12px; padding:4px 14px; border-radius:20px;">🎯 Карточка Дня</span>
-                    <span id="today-status" style="font-size:12px; color:var(--text-muted);"></span>
+                    <span style="background: var(--accent-primary); color:#fff; font-weight:800; font-size:10px; padding:3px 12px; border-radius:16px;">🎯 Карточка Дня</span>
+                    <span id="today-status" style="font-size:10px; color:var(--text-muted);"></span>
                 </div>
 
                 <!-- БАННЕР: ДЕНЬ ЗАПОЛНЕН -->
@@ -1005,81 +1051,84 @@
                     </div>
                 </div>
 
-                <div class="section-title">⚡ Состояние и Дисциплина</div>
-                <div class="grid-2">
-                    <div class="field-group" id="fg-energy">
-                        <div class="label-row">
-                            <label>⚡ Энергия: <span id="energy-val" style="color:var(--accent-primary); font-weight:800;">5</span>/10</label>
+                <!-- ПОЛЯ ВВОДА (СКРЫВАЮТСЯ ПОСЛЕ СОХРАНЕНИЯ) -->
+                <div class="fields-wrapper" id="fields-wrapper">
+                    <div class="section-title">⚡ Состояние и Дисциплина</div>
+                    <div class="grid-2">
+                        <div class="field-group" id="fg-energy">
+                            <div class="label-row">
+                                <label>⚡ Энергия: <span id="energy-val" style="color:var(--accent-primary); font-weight:800;">5</span>/10</label>
+                            </div>
+                            <input type="range" min="1" max="10" value="5" id="today-energy" class="energy-range" oninput="document.getElementById('energy-val').innerText = this.value">
                         </div>
-                        <input type="range" min="1" max="10" value="5" id="today-energy" class="energy-range" oninput="document.getElementById('energy-val').innerText = this.value">
-                    </div>
-                    <div class="field-group" id="fg-sport">
-                        <label>🏃 Спорт / Активность</label>
-                        <select id="today-sport">
-                            <option value="Нет">❌ Без активности</option>
-                            <option value="Легкая">🚶 Прогулка / Зарядка</option>
-                            <option value="Тренировка">🏋️ Полноценная тренировка</option>
-                            <option value="Кардио">🚴 Кардио / Бег / Вел</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="section-title">🎯 Главный Фокус Дня</div>
-                <div class="field-group" id="fg-goal">
-                    <div class="label-row">
-                        <label>🎯 Главная цель / Задача дня</label>
-                        <button class="btn-mic" onclick="VoiceInput.start('today-goal', this)">🎤</button>
-                    </div>
-                    <textarea id="today-goal" placeholder="Какую главную цель закрываем сегодня?"></textarea>
-                </div>
-                <div class="field-group" id="fg-subgoals">
-                    <div class="label-row">
-                        <label>📌 Второстепенные задачи</label>
-                        <button class="btn-mic" onclick="VoiceInput.start('today-subgoals', this)">🎤</button>
-                    </div>
-                    <input type="text" id="today-subgoals" placeholder="Например: отправить письмо, купить продукты...">
-                </div>
-
-                <div class="section-title">🧠 Итоги & Осознанность</div>
-                <div class="field-group" id="fg-victory">
-                    <div class="label-row">
-                        <label>🏆 Главная победа дня</label>
-                        <button class="btn-mic" onclick="VoiceInput.start('today-victory', this)">🎤</button>
-                    </div>
-                    <textarea id="today-victory" placeholder="Что сегодня получилось лучше всего?"></textarea>
-                </div>
-                <div class="field-group" id="fg-thanks">
-                    <div class="label-row">
-                        <label>❤️ За что благодарен сегодня</label>
-                        <button class="btn-mic" onclick="VoiceInput.start('today-thanks', this)">🎤</button>
-                    </div>
-                    <textarea id="today-thanks" placeholder="Кому или чему благодарен..."></textarea>
-                </div>
-                <div class="field-group" id="fg-refusal">
-                    <div class="label-row">
-                        <label>🚫 Отказ дня</label>
-                        <button class="btn-mic" onclick="VoiceInput.start('today-refusal', this)">🎤</button>
-                    </div>
-                    <textarea id="today-refusal" placeholder="Чему или кому сказал «нет»..."></textarea>
-                </div>
-                <div class="grid-2">
-                    <div class="field-group" id="fg-lesson">
-                        <div class="label-row">
-                            <label>💡 Главный урок</label>
-                            <button class="btn-mic" onclick="VoiceInput.start('today-lesson', this)">🎤</button>
+                        <div class="field-group" id="fg-sport">
+                            <label>🏃 Спорт / Активность</label>
+                            <select id="today-sport">
+                                <option value="Нет">❌ Без активности</option>
+                                <option value="Легкая">🚶 Прогулка / Зарядка</option>
+                                <option value="Тренировка">🏋️ Полноценная тренировка</option>
+                                <option value="Кардио">🚴 Кардио / Бег / Вел</option>
+                            </select>
                         </div>
-                        <textarea id="today-lesson" placeholder="Что понял за день..."></textarea>
                     </div>
-                    <div class="field-group" id="fg-word">
-                        <div class="label-row">
-                            <label>🔥 Слово дня</label>
-                            <button class="btn-mic" onclick="VoiceInput.start('today-word', this)">🎤</button>
-                        </div>
-                        <textarea id="today-word" placeholder="Девиз дня..."></textarea>
-                    </div>
-                </div>
 
-                <button class="btn-save" id="save-btn" onclick="DayManager.save()">Сохранить день ✅</button>
+                    <div class="section-title">🎯 Главный Фокус Дня</div>
+                    <div class="field-group" id="fg-goal">
+                        <div class="label-row">
+                            <label>🎯 Главная цель / Задача дня</label>
+                            <button class="btn-mic" onclick="VoiceInput.start('today-goal', this)">🎤</button>
+                        </div>
+                        <textarea id="today-goal" placeholder="Какую главную цель закрываем сегодня?"></textarea>
+                    </div>
+                    <div class="field-group" id="fg-subgoals">
+                        <div class="label-row">
+                            <label>📌 Второстепенные задачи</label>
+                            <button class="btn-mic" onclick="VoiceInput.start('today-subgoals', this)">🎤</button>
+                        </div>
+                        <input type="text" id="today-subgoals" placeholder="Например: отправить письмо, купить продукты...">
+                    </div>
+
+                    <div class="section-title">🧠 Итоги & Осознанность</div>
+                    <div class="field-group" id="fg-victory">
+                        <div class="label-row">
+                            <label>🏆 Главная победа дня</label>
+                            <button class="btn-mic" onclick="VoiceInput.start('today-victory', this)">🎤</button>
+                        </div>
+                        <textarea id="today-victory" placeholder="Что сегодня получилось лучше всего?"></textarea>
+                    </div>
+                    <div class="field-group" id="fg-thanks">
+                        <div class="label-row">
+                            <label>❤️ За что благодарен сегодня</label>
+                            <button class="btn-mic" onclick="VoiceInput.start('today-thanks', this)">🎤</button>
+                        </div>
+                        <textarea id="today-thanks" placeholder="Кому или чему благодарен..."></textarea>
+                    </div>
+                    <div class="field-group" id="fg-refusal">
+                        <div class="label-row">
+                            <label>🚫 Отказ дня</label>
+                            <button class="btn-mic" onclick="VoiceInput.start('today-refusal', this)">🎤</button>
+                        </div>
+                        <textarea id="today-refusal" placeholder="Чему или кому сказал «нет»..."></textarea>
+                    </div>
+                    <div class="grid-2">
+                        <div class="field-group" id="fg-lesson">
+                            <div class="label-row">
+                                <label>💡 Главный урок</label>
+                                <button class="btn-mic" onclick="VoiceInput.start('today-lesson', this)">🎤</button>
+                            </div>
+                            <textarea id="today-lesson" placeholder="Что понял за день..."></textarea>
+                        </div>
+                        <div class="field-group" id="fg-word">
+                            <div class="label-row">
+                                <label>🔥 Слово дня</label>
+                                <button class="btn-mic" onclick="VoiceInput.start('today-word', this)">🎤</button>
+                            </div>
+                            <textarea id="today-word" placeholder="Девиз дня..."></textarea>
+                        </div>
+                    </div>
+
+                    <button class="btn-save" id="save-btn" onclick="DayManager.save()">Сохранить день ✅</button>
+                </div>
             </div>
         </section>
 
@@ -1117,7 +1166,7 @@
                 </div>
                 <div class="chart-box">
                     <h2>📈 Динамика энергии</h2>
-                    <canvas id="energyChart" height="180"></canvas>
+                    <canvas id="energyChart" height="160"></canvas>
                 </div>
             </div>
 
@@ -1145,7 +1194,6 @@
         ================================================================ -->
         <section id="sec-settings" class="page-section">
 
-            <!-- УВЕДОМЛЕНИЯ -->
             <div class="settings-group">
                 <h3>🔔 Уведомления</h3>
                 <div class="setting-row">
@@ -1170,7 +1218,6 @@
                 </div>
             </div>
 
-            <!-- ВНЕШНИЙ ВИД -->
             <div class="settings-group">
                 <h3>🎨 Внешний вид</h3>
                 <div class="setting-row">
@@ -1191,7 +1238,6 @@
                 </div>
             </div>
 
-            <!-- ДАННЫЕ -->
             <div class="settings-group">
                 <h3>💾 Данные</h3>
                 <div class="setting-row">
@@ -1204,7 +1250,6 @@
                 </div>
             </div>
 
-            <!-- PDF ЭКСПОРТ -->
             <div class="settings-group">
                 <h3>📄 Экспорт статистики</h3>
                 <div class="setting-row">
@@ -1223,8 +1268,8 @@
                     <label>Включить детализацию</label>
                     <input type="checkbox" id="pdf-details" checked>
                 </div>
-                <div class="setting-row" style="border-bottom: none; padding-top: 12px;">
-                    <button class="btn-action pdf" onclick="PDFExport.export()" style="width:100%; text-align:center; padding:10px; font-size:15px; font-weight:700;">📄 Скачать PDF-отчёт</button>
+                <div class="setting-row" style="border-bottom: none; padding-top: 8px;">
+                    <button class="btn-action pdf" onclick="PDFExport.export()" style="width:100%; text-align:center; padding:8px; font-size:13px; font-weight:700;">📄 Скачать PDF-отчёт</button>
                 </div>
             </div>
 
@@ -1391,7 +1436,7 @@
         };
 
         // ===================================================================
-        //  DAY MANAGER — С ЗАЩИТОЙ, РЕДАКТИРОВАНИЕМ И ДОПОЛНЕНИЕМ
+        //  DAY MANAGER
         // ===================================================================
         const DayManager = {
             _mode: 'view', // 'view' | 'edit' | 'append'
@@ -1424,35 +1469,33 @@
 
             _lockDay(record) {
                 this._mode = 'view';
-                // Блокируем поля
-                document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
-                    .forEach(el => el.disabled = true);
+                // Скрываем поля ввода
+                document.getElementById('fields-wrapper').classList.add('hidden');
                 // Показываем баннер
                 const banner = document.getElementById('day-locked-banner');
-                banner.style.display = 'flex';
+                banner.classList.add('visible');
                 document.getElementById('banner-date').textContent = `✅ ${record.formattedDate || this.formattedDate}`;
                 document.getElementById('banner-energy').textContent = `⚡ ${record.energy || 5}/10`;
                 document.getElementById('banner-goal').textContent = `🎯 ${record.goal || '—'}`;
                 document.getElementById('banner-victory').textContent = `🏆 ${record.victory || '—'}`;
-                // Меняем кнопку
-                const btn = document.getElementById('save-btn');
-                btn.textContent = '🔒 День заполнен';
-                btn.disabled = true;
-                btn.className = 'btn-save';
                 document.getElementById('today-status').textContent = '✅ Сохранено';
                 document.getElementById('today-status').style.color = 'var(--success)';
             },
 
             _unlockDay() {
                 this._mode = 'view';
+                // Показываем поля ввода
+                document.getElementById('fields-wrapper').classList.remove('hidden');
+                // Скрываем баннер
+                document.getElementById('day-locked-banner').classList.remove('visible');
+                document.getElementById('today-status').textContent = '';
+                // Активируем поля
                 document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
                     .forEach(el => el.disabled = false);
-                document.getElementById('day-locked-banner').style.display = 'none';
                 const btn = document.getElementById('save-btn');
                 btn.textContent = 'Сохранить день ✅';
                 btn.disabled = false;
                 btn.className = 'btn-save';
-                document.getElementById('today-status').textContent = '';
             },
 
             _clearForm() {
@@ -1467,9 +1510,12 @@
             enableEdit() {
                 if (this._mode === 'edit') return;
                 this._mode = 'edit';
+                // Показываем поля
+                document.getElementById('fields-wrapper').classList.remove('hidden');
+                document.getElementById('day-locked-banner').classList.remove('visible');
+                // Разблокируем все поля
                 document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
                     .forEach(el => el.disabled = false);
-                document.getElementById('day-locked-banner').style.display = 'none';
                 const btn = document.getElementById('save-btn');
                 btn.textContent = '💾 Сохранить изменения';
                 btn.disabled = false;
@@ -1480,9 +1526,12 @@
             enableAppend() {
                 if (this._mode === 'append') return;
                 this._mode = 'append';
+                // Показываем поля
+                document.getElementById('fields-wrapper').classList.remove('hidden');
+                document.getElementById('day-locked-banner').classList.remove('visible');
+                // Разблокируем все поля
                 document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
                     .forEach(el => el.disabled = false);
-                document.getElementById('day-locked-banner').style.display = 'none';
                 const btn = document.getElementById('save-btn');
                 btn.textContent = '➕ Добавить к дню';
                 btn.disabled = false;
@@ -1505,7 +1554,6 @@
                     word: document.getElementById('today-word').value.trim()
                 };
 
-                // Валидация
                 if (!record.goal && this._mode !== 'append') {
                     Toast.show('⚠️ Добавьте главную цель дня!', 'warning');
                     document.getElementById('today-goal').focus();
@@ -1520,7 +1568,6 @@
                 const existingIndex = entries.findIndex(item => item.date === this.todayKey);
 
                 if (this._mode === 'append' && existingIndex >= 0) {
-                    // Дополнение: добавляем к существующим полям
                     const existing = entries[existingIndex];
                     ['goal', 'subgoals', 'victory', 'thanks', 'refusal', 'lesson', 'word'].forEach(f => {
                         if (record[f]) {
@@ -1534,7 +1581,6 @@
                     entries[existingIndex] = record;
                     Toast.show('➕ День дополнен!', 'success');
                 } else if (existingIndex >= 0) {
-                    // Перезапись
                     if (!confirm('📝 День уже сохранён. Перезаписать?')) {
                         btn.textContent = 'Сохранить день ✅';
                         btn.disabled = false;
@@ -1543,7 +1589,6 @@
                     entries[existingIndex] = record;
                     Toast.show('✏️ День обновлён!', 'success');
                 } else {
-                    // Новый день
                     entries.push(record);
                     Toast.show('🚀 День сохранён!', 'success');
                 }
@@ -1591,7 +1636,7 @@
         };
 
         // ===================================================================
-        //  INSIGHTS (локальная аналитика)
+        //  INSIGHTS
         // ===================================================================
         const Insights = {
             generate() {
@@ -1609,7 +1654,6 @@
                 weekAgo.setDate(weekAgo.getDate() - 7);
                 const weekEntries = entries.filter(e => new Date(e.date) >= weekAgo);
 
-                // 1. Тренд энергии
                 if (weekEntries.length > 1) {
                     const weekAvg = weekEntries.reduce((s, e) => s + parseFloat(e.energy), 0) / weekEntries.length;
                     const allAvg = entries.reduce((s, e) => s + parseFloat(e.energy), 0) / entries.length;
@@ -1619,7 +1663,6 @@
                     else insights.push(`📊 Энергия стабильна (${diff}% за неделю).`);
                 }
 
-                // 2. Связь спорта и энергии
                 const sportDays = entries.filter(e => e.sport && e.sport !== 'Нет');
                 const noSportDays = entries.filter(e => !e.sport || e.sport === 'Нет');
                 if (sportDays.length > 2 && noSportDays.length > 2) {
@@ -1632,7 +1675,6 @@
                     }
                 }
 
-                // 3. Лучший день недели
                 const dayStats = {};
                 entries.forEach(e => {
                     const day = new Date(e.date).getDay();
@@ -1652,7 +1694,6 @@
                     insights.push(`🔥 Самый продуктивный день — ${dayNames[bestDay]} (средняя энергия ${bestScore.toFixed(1)}).`);
                 }
 
-                // 4. Лучший день
                 let bestDayEver = entries.reduce((best, e) => {
                     const score = parseFloat(e.energy) + (e.goal ? 1 : 0) + (e.victory ? 1 : 0);
                     return score > best.score ? { date: e.formattedDate, score } : best;
@@ -1661,7 +1702,6 @@
                     insights.push(`🏆 Лучший день: ${bestDayEver.date}.`);
                 }
 
-                // 5. Частые темы в уроках
                 const lessons = entries.map(e => e.lesson).filter(Boolean);
                 if (lessons.length > 3) {
                     const wordFreq = {};
@@ -1678,13 +1718,12 @@
                     }
                 }
 
-                // Ограничиваем 5 инсайтами
                 container.innerHTML = insights.slice(0, 5).map(i =>
                     `<div class="insight-item">${i}</div>`
                 ).join('');
 
                 if (insights.length === 0) {
-                    container.innerHTML = '<div class="insight-item">📊 Анализ пока не дал ярких выводов. Сохраняй больше дней!</div>';
+                    container.innerHTML = '<div class="insight-item">📊 Анализ пока не дал ярких выводов.</div>';
                 }
             }
         };
@@ -1740,7 +1779,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } }
+                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 9 } } } }
                     }
                 });
 
@@ -1764,10 +1803,10 @@
                     options: {
                         responsive: true,
                         scales: {
-                            y: { min: 0, max: 10, ticks: { color: '#94a3b8', font: { size: 9 } } },
-                            x: { ticks: { color: '#94a3b8', maxRotation: 45, font: { size: 8 } } }
+                            y: { min: 0, max: 10, ticks: { color: '#94a3b8', font: { size: 8 } } },
+                            x: { ticks: { color: '#94a3b8', maxRotation: 45, font: { size: 7 } } }
                         },
-                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } }
+                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 9 } } } }
                     }
                 });
             }
@@ -1802,7 +1841,7 @@
                     if (!empty) {
                         const p = document.createElement('p');
                         p.className = 'empty-state';
-                        p.style.cssText = 'text-align:center;color:var(--text-muted);padding:20px;font-size:13px;';
+                        p.style.cssText = 'text-align:center;color:var(--text-muted);padding:16px;font-size:12px;';
                         p.textContent = '🔍 Ничего не найдено';
                         container.appendChild(p);
                     }
@@ -1835,7 +1874,7 @@
                 });
                 if (count === 0) {
                     container.innerHTML =
-                        `<p style="text-align:center;color:var(--text-muted);padding:20px;font-size:13px;">📭 Записей в этой категории пока нет</p>`;
+                        `<p style="text-align:center;color:var(--text-muted);padding:16px;font-size:12px;">📭 Записей в этой категории пока нет</p>`;
                 }
             }
         };
@@ -1849,7 +1888,7 @@
                 container.innerHTML = '';
                 const entries = Store.getAll().sort((a, b) => new Date(b.date) - new Date(a.date));
                 if (!entries.length) {
-                    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:20px;">📭 История пуста</p>';
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:16px;">📭 История пуста</p>';
                     return;
                 }
                 entries.forEach(item => {
@@ -1896,7 +1935,6 @@
                     pdfPeriod: document.getElementById('pdf-period').value
                 };
                 localStorage.setItem('app_settings', JSON.stringify(settings));
-                // Обновляем авто-тему
                 if (settings.themeAuto) {
                     const hour = new Date().getHours();
                     const theme = (hour >= 7 && hour < 20) ? 'glass' : 'cyber';
@@ -2012,7 +2050,6 @@
                         return;
                     }
 
-                    // Фильтруем по периоду
                     let filtered = entries;
                     const now = new Date();
                     if (period === 'week') {
@@ -2035,96 +2072,90 @@
                     const sorted = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
                     const profile = ProfileManager.getData();
 
-                    // Считаем статистику
                     const totalDays = sorted.length;
                     const avgEnergy = (sorted.reduce((s, e) => s + parseFloat(e.energy), 0) / totalDays).toFixed(1);
                     const goalsCount = sorted.filter(e => e.goal).length;
 
-                    // Генерируем инсайты
                     let insightsHTML = '';
                     if (includeInsights) {
                         const insights = this._generateInsightsForPDF(sorted);
                         insightsHTML = insights.map(i =>
-                            `<div style="padding:6px 0; border-bottom:1px solid #333; font-size:13px;">${i}</div>`
+                            `<div style="padding:5px 0; border-bottom:1px solid #2a2a2a; font-size:12px;">${i}</div>`
                         ).join('');
                     }
 
-                    // Детализация
                     let detailsHTML = '';
                     if (includeDetails) {
                         detailsHTML = sorted.map(e =>
                             `<tr style="border-bottom:1px solid #2a2a2a;">
-                                <td style="padding:6px 8px; font-size:12px; color:#94a3b8;">${e.formattedDate}</td>
-                                <td style="padding:6px 8px; font-size:12px; text-align:center;">${e.energy || '-'}/10</td>
-                                <td style="padding:6px 8px; font-size:12px;">${e.goal || '-'}</td>
-                                <td style="padding:6px 8px; font-size:12px; color:#10b981;">${e.victory || '-'}</td>
+                                <td style="padding:5px 6px; font-size:11px; color:#94a3b8;">${e.formattedDate}</td>
+                                <td style="padding:5px 6px; font-size:11px; text-align:center;">${e.energy || '-'}/10</td>
+                                <td style="padding:5px 6px; font-size:11px;">${e.goal || '-'}</td>
+                                <td style="padding:5px 6px; font-size:11px; color:#10b981;">${e.victory || '-'}</td>
                             </tr>`
                         ).join('');
                     }
 
-                    // Собираем HTML для PDF
                     const fullName = [profile.lastname, profile.firstname, profile.middlename].filter(Boolean).join(' ') ||
                         'Пользователь';
                     const cityAge = [profile.city, profile.age ? profile.age + ' лет' : ''].filter(Boolean).join(' • ');
 
                     const pdfContent = `
-                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0a0f; color: #f8fafc; padding: 40px; max-width: 800px; margin: 0 auto;">
-                            <div style="border-bottom: 2px solid #6366f1; padding-bottom: 20px; margin-bottom: 24px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; background: #0a0a0f; color: #f8fafc; padding: 30px; max-width: 750px; margin: 0 auto;">
+                            <div style="border-bottom: 2px solid #6366f1; padding-bottom: 16px; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                                     <div>
-                                        <div style="font-size: 24px; font-weight: 800; color: #6366f1;">⚡ Executive Daily Hub</div>
-                                        <div style="font-size: 14px; color: #94a3b8; margin-top: 4px;">Отчёт по продуктивности</div>
+                                        <div style="font-size: 20px; font-weight: 800; color: #6366f1;">⚡ Executive Daily Hub</div>
+                                        <div style="font-size: 12px; color: #94a3b8; margin-top: 3px;">Отчёт по продуктивности</div>
                                     </div>
-                                    <div style="text-align: right; font-size: 13px; color: #94a3b8;">
-                                        <div>${new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'})}</div>
+                                    <div style="text-align: right; font-size: 12px; color: #94a3b8;">
+                                        ${new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'})}
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Досье -->
-                            <div style="background: #161e2e; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.06);">
-                                <div style="display: flex; flex-wrap: wrap; gap: 8px 24px;">
-                                    <div><span style="color: #94a3b8; font-size: 12px;">👤</span> <span style="font-weight: 600;">${fullName}</span></div>
-                                    ${cityAge ? `<div><span style="color: #94a3b8; font-size: 12px;">📍</span> ${cityAge}</div>` : ''}
-                                    <div><span style="color: #94a3b8; font-size: 12px;">📊</span> ${totalDays} дней</div>
-                                    <div><span style="color: #94a3b8; font-size: 12px;">⚡</span> Средняя энергия: ${avgEnergy}/10</div>
-                                    <div><span style="color: #94a3b8; font-size: 12px;">🎯</span> Целей закрыто: ${goalsCount}</div>
+                            <div style="background: #161e2e; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.06);">
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px 20px;">
+                                    <div><span style="color: #94a3b8; font-size: 11px;">👤</span> <span style="font-weight: 600;">${fullName}</span></div>
+                                    ${cityAge ? `<div><span style="color: #94a3b8; font-size: 11px;">📍</span> ${cityAge}</div>` : ''}
+                                    <div><span style="color: #94a3b8; font-size: 11px;">📊</span> ${totalDays} дней</div>
+                                    <div><span style="color: #94a3b8; font-size: 11px;">⚡</span> Средняя энергия: ${avgEnergy}/10</div>
+                                    <div><span style="color: #94a3b8; font-size: 11px;">🎯</span> Целей: ${goalsCount}</div>
                                 </div>
                             </div>
 
-                            <!-- Статистика -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                                <div style="background: #161e2e; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
-                                    <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">Всего дней</div>
-                                    <div style="font-size: 28px; font-weight: 800; color: #6366f1;">${totalDays}</div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                                <div style="background: #161e2e; border-radius: 10px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
+                                    <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase;">Всего дней</div>
+                                    <div style="font-size: 22px; font-weight: 800; color: #6366f1;">${totalDays}</div>
                                 </div>
-                                <div style="background: #161e2e; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
-                                    <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">Средняя энергия</div>
-                                    <div style="font-size: 28px; font-weight: 800; color: #6366f1;">${avgEnergy}</div>
+                                <div style="background: #161e2e; border-radius: 10px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
+                                    <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase;">Средняя энергия</div>
+                                    <div style="font-size: 22px; font-weight: 800; color: #6366f1;">${avgEnergy}</div>
                                 </div>
-                                <div style="background: #161e2e; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
-                                    <div style="font-size: 11px; color: #94a3b8; text-transform: uppercase;">Закрыто целей</div>
-                                    <div style="font-size: 28px; font-weight: 800; color: #6366f1;">${goalsCount}</div>
+                                <div style="background: #161e2e; border-radius: 10px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.06);">
+                                    <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase;">Закрыто целей</div>
+                                    <div style="font-size: 22px; font-weight: 800; color: #6366f1;">${goalsCount}</div>
                                 </div>
                             </div>
 
                             ${includeInsights ? `
-                            <div style="background: #161e2e; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.06);">
-                                <div style="font-size: 14px; font-weight: 700; color: #6366f1; margin-bottom: 10px;">🧠 Инсайты</div>
-                                ${insightsHTML || '<div style="color: #94a3b8; font-size: 13px;">Недостаточно данных для анализа</div>'}
+                            <div style="background: #161e2e; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size: 12px; font-weight: 700; color: #6366f1; margin-bottom: 6px;">🧠 Инсайты</div>
+                                ${insightsHTML || '<div style="color: #94a3b8; font-size: 12px;">Недостаточно данных для анализа</div>'}
                             </div>
                             ` : ''}
 
                             ${includeDetails && sorted.length > 0 ? `
-                            <div style="background: #161e2e; border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto;">
-                                <div style="font-size: 14px; font-weight: 700; color: #6366f1; margin-bottom: 10px;">📅 Детализация</div>
-                                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                            <div style="background: #161e2e; border-radius: 10px; padding: 12px 16px; border: 1px solid rgba(255,255,255,0.06); overflow-x: auto;">
+                                <div style="font-size: 12px; font-weight: 700; color: #6366f1; margin-bottom: 8px;">📅 Детализация</div>
+                                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
                                     <thead>
                                         <tr style="border-bottom: 2px solid #6366f1;">
-                                            <th style="text-align:left; padding:6px 8px; color:#94a3b8; font-size:11px;">Дата</th>
-                                            <th style="text-align:center; padding:6px 8px; color:#94a3b8; font-size:11px;">Энергия</th>
-                                            <th style="text-align:left; padding:6px 8px; color:#94a3b8; font-size:11px;">Цель</th>
-                                            <th style="text-align:left; padding:6px 8px; color:#94a3b8; font-size:11px;">Победа</th>
+                                            <th style="text-align:left; padding:4px 6px; color:#94a3b8; font-size:9px;">Дата</th>
+                                            <th style="text-align:center; padding:4px 6px; color:#94a3b8; font-size:9px;">Энергия</th>
+                                            <th style="text-align:left; padding:4px 6px; color:#94a3b8; font-size:9px;">Цель</th>
+                                            <th style="text-align:left; padding:4px 6px; color:#94a3b8; font-size:9px;">Победа</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -2134,20 +2165,19 @@
                             </div>
                             ` : ''}
 
-                            <div style="margin-top: 30px; padding-top: 16px; border-top: 1px solid #2a2a2a; text-align: center; font-size: 11px; color: #4a4a5a;">
+                            <div style="margin-top: 24px; padding-top: 12px; border-top: 1px solid #2a2a2a; text-align: center; font-size: 9px; color: #4a4a5a;">
                                 Сгенерировано в Executive Daily Hub v5.0
                             </div>
                         </div>
                     `;
 
-                    // Создаём временный элемент для PDF
                     const wrapper = document.createElement('div');
                     wrapper.innerHTML = pdfContent;
-                    wrapper.style.cssText = 'position: fixed; left: -9999px; top: 0; width: 800px; background: #0a0a0f;';
+                    wrapper.style.cssText = 'position: fixed; left: -9999px; top: 0; width: 750px; background: #0a0a0f;';
                     document.body.appendChild(wrapper);
 
                     const opt = {
-                        margin: [10, 10, 10, 10],
+                        margin: [8, 8, 8, 8],
                         filename: `daily_report_${new Date().toISOString().slice(0,10)}.pdf`,
                         image: { type: 'jpeg', quality: 0.98 },
                         html2canvas: {
@@ -2217,9 +2247,7 @@
             },
 
             _scheduleChecks() {
-                // Проверяем каждый час
                 setInterval(() => this._check(), 60 * 60 * 1000);
-                // Проверяем сразу
                 setTimeout(() => this._check(), 5000);
             },
 
@@ -2231,7 +2259,6 @@
                 const hour = now.getHours();
                 const minutes = now.getMinutes();
 
-                // Утреннее напоминание (если время совпадает)
                 const morningTime = settings.notifMorning || '09:00';
                 const [mHour, mMin] = morningTime.split(':').map(Number);
                 if (hour === mHour && minutes === mMin) {
@@ -2241,7 +2268,6 @@
                     }
                 }
 
-                // Вечернее напоминание
                 const eveningTime = settings.notifEvening || '21:00';
                 const [eHour, eMin] = eveningTime.split(':').map(Number);
                 if (hour === eHour && minutes === eMin) {
@@ -2251,18 +2277,16 @@
                     }
                 }
 
-                // Проверка пропущенных дней
                 if (settings.remindMissed !== false) {
                     const yesterday = new Date(now);
                     yesterday.setDate(yesterday.getDate() - 1);
                     const yesterdayStr = yesterday.toISOString().slice(0, 10);
                     const entries = Store.getAll();
                     if (!entries.find(e => e.date === yesterdayStr) && entries.length > 0) {
-                        this._send('⚠️ Ты пропустил день!', 'Заполни вчерашнюю карточку, чтобы не сломать серию! 🔥');
+                        this._send('⚠️ Ты пропустил день!', 'Заполни вчерашнюю карточку! 🔥');
                     }
                 }
 
-                // Мотивация
                 if (settings.motivation !== false) {
                     const streak = Store.getStreak();
                     if (streak > 0 && streak % 7 === 0) {
@@ -2285,6 +2309,32 @@
         };
 
         // ===================================================================
+        //  АВТО-ОБНОВЛЕНИЕ КАЖДЫЙ ДЕНЬ В ПОЛНОЧЬ
+        // ===================================================================
+        function scheduleDailyReset() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+
+            const msUntilMidnight = tomorrow - now;
+
+            setTimeout(() => {
+                // Обновляем карточку дня
+                DayManager.load();
+                UI.updateDate();
+                UI.updateStreak();
+                // Обновляем инсайты, если открыта статистика
+                if (document.getElementById('sec-stats').classList.contains('active')) {
+                    Insights.generate();
+                    Stats.render();
+                }
+                // Перепланируем на следующий день
+                scheduleDailyReset();
+            }, msUntilMidnight);
+        }
+
+        // ===================================================================
         //  INIT
         // ===================================================================
         function init() {
@@ -2296,6 +2346,8 @@
             PinManager.init();
             SettingsManager.load();
             Notifications.init();
+            // Запускаем ежедневное обновление
+            scheduleDailyReset();
 
             document.getElementById('pin-input').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') PinManager.check();
