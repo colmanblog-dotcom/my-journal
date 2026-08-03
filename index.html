@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Дневник Осознанности & Рефлексии</title>
+    <title>⚡ Дневник Осознанности & Аналитика</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg: #090d16;
@@ -37,7 +38,7 @@
             background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
-            padding: 24px 16px 60px;
+            padding: 20px 16px 100px; /* Запас снизу под мобильное меню */
         }
 
         .container {
@@ -52,34 +53,32 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .logo-area h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .logo-area p {
-            color: var(--text-muted);
+            color: #38bdf8;
             font-size: 13px;
             margin-top: 4px;
+            font-weight: 600;
         }
 
-        .meta-controls {
+        .user-meta-controls {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
@@ -93,11 +92,11 @@
         }
 
         .meta-group label {
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .meta-group input {
@@ -105,97 +104,91 @@
             border: 1px solid var(--input-border);
             border-radius: var(--radius-md);
             color: #fff;
-            padding: 8px 14px;
+            padding: 8px 12px;
             font-size: 13px;
             font-weight: 600;
             outline: none;
-            transition: all 0.2s;
         }
 
-        .meta-group input:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 12px var(--accent-glow);
-        }
-
-        /* NAVBAR & CONTROLS */
-        .toolbar {
+        /* NAVIGATION MENU (СНОСКИ / ВКЛАДКИ) */
+        .nav-menu {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .view-switch {
-            display: flex;
-            background: rgba(15, 23, 42, 0.8);
-            padding: 4px;
-            border-radius: var(--radius-md);
+            justify-content: center;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
+            padding: 6px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            position: sticky;
+            top: 16px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .view-btn {
+        .nav-item {
+            flex: 1;
+            max-width: 200px;
             background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .view-btn.active {
-            background: var(--accent-primary);
-            color: #fff;
-            box-shadow: 0 4px 12px var(--accent-glow);
-        }
-
-        .btn-action {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--card-border);
-            color: #fff;
-            padding: 10px 18px;
+            padding: 12px 16px;
             border-radius: var(--radius-md);
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
 
-        .btn-action:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-1px);
+        .nav-item:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* GRID CARDS VIEW */
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        /* SECTION MANAGERS */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS VIEW */
         .days-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
         .day-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: 20px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
         }
 
-        .day-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+        .day-card.today-card {
+            border: 2px solid var(--accent-primary);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .day-card-header {
@@ -211,22 +204,14 @@
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
             color: #fff;
             font-weight: 800;
-            font-size: 14px;
-            padding: 6px 14px;
+            font-size: 13px;
+            padding: 6px 12px;
             border-radius: 20px;
-            box-shadow: 0 4px 10px var(--accent-glow);
         }
 
-        .energy-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .energy-selector label {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
+        .today-badge {
+            background: #10b981 !important;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
         }
 
         .energy-input {
@@ -247,12 +232,11 @@
 
         .field-group label {
             display: block;
-            font-size: 11.5px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--text-muted);
             margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .field-group textarea {
@@ -263,174 +247,200 @@
             color: #fff;
             padding: 10px 12px;
             font-size: 13px;
-            line-height: 1.4;
             resize: vertical;
             min-height: 48px;
             outline: none;
-            transition: border 0.2s;
         }
 
-        .field-group textarea:focus {
-            border-color: var(--accent-primary);
-            background: rgba(15, 23, 42, 0.85);
+        /* STATS SECTION */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        /* TABLE VIEW */
-        .table-view-container {
-            display: none;
+        .stat-card {
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
-            overflow-x: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            padding: 20px;
+            text-align: center;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            min-width: 900px;
-        }
-
-        th {
-            background: rgba(15, 23, 42, 0.8);
-            padding: 14px 16px;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+        .stat-card h3 {
+            font-size: 12px;
             color: var(--text-muted);
-            font-weight: 700;
-            border-bottom: 1px solid var(--card-border);
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
-        td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            vertical-align: top;
-        }
-
-        td.day-num {
+        .stat-card .value {
+            font-size: 32px;
             font-weight: 800;
             color: #a5b4fc;
-            text-align: center;
-            font-size: 14px;
         }
 
-        td textarea {
+        .chart-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        /* NOTES SECTION */
+        .notes-area {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .notes-area textarea {
             width: 100%;
-            background: transparent;
-            border: 1px solid transparent;
+            height: 400px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-md);
             color: #fff;
-            font-size: 12.5px;
-            padding: 6px 8px;
-            border-radius: 6px;
-            resize: vertical;
-            min-height: 38px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.6;
             outline: none;
+            resize: vertical;
         }
 
-        td textarea:focus {
-            background: var(--input-bg);
-            border-color: var(--accent-primary);
+        .btn-action {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--card-border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
         @media (max-width: 640px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .meta-controls {
-                width: 100%;
-                flex-direction: column;
-            }
-            .meta-group {
-                width: 100%;
-            }
-            .days-grid {
-                grid-template-columns: 1fr;
-            }
+            header { flex-direction: column; align-items: flex-start; }
+            .user-meta-controls { width: 100%; flex-direction: column; }
+            .meta-group { width: 100%; }
+            .days-grid { grid-template-columns: 1fr; }
+            .nav-item { font-size: 12px; padding: 10px 8px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- HEADER METADATA -->
+        <!-- HEADER -->
         <header>
             <div class="logo-area">
-                <h1>⚡ Осознанность & Рефлексия</h1>
-                <p>Ваш трендовый цифровой дневник личного роста</p>
+                <h1>⚡ Осознанность & Аналитика</h1>
+                <p id="today-date-display">📅 Сегодня: --.--.----</p>
             </div>
 
-            <div class="meta-controls">
+            <div class="user-meta-controls">
                 <div class="meta-group">
-                    <label>📅 Месяц / Период</label>
-                    <input type="text" id="meta-month" value="Сентябрь 2026" oninput="saveData()">
+                    <label>👤 Владелец (ФИО)</label>
+                    <input type="text" id="user-fullname" placeholder="Имя и Фамилия" oninput="saveData()">
                 </div>
                 <div class="meta-group">
-                    <label>🛠 Дата патча / Ревизия</label>
-                    <input type="text" id="meta-patch" value="v2.4 (02.08.2026)" oninput="saveData()">
+                    <label>📅 Период</label>
+                    <input type="text" id="meta-month" value="Август 2026" oninput="saveData()">
+                </div>
+                <div style="display: flex; gap: 8px; align-self: flex-end;">
+                    <button class="btn-action" onclick="exportData()">💾 Бэкап</button>
+                    <button class="btn-action" onclick="resetData()" style="color: #f87171;">🗑</button>
                 </div>
             </div>
         </header>
 
-        <!-- TOOLBAR & ACTIONS -->
-        <div class="toolbar">
-            <div class="view-switch">
-                <button class="view-btn active" id="btn-grid" onclick="switchView('grid')">📱 Карточки</button>
-                <button class="view-btn" id="btn-table" onclick="switchView('table')">📊 Таблица</button>
+        <!-- MAIN MENU (СНОСКИ) -->
+        <nav class="nav-menu">
+            <button class="nav-item active" onclick="openSection('journal', this)">📖 Дневник</button>
+            <button class="nav-item" onclick="openSection('stats', this)">📈 Статистика</button>
+            <button class="nav-item" onclick="openSection('notes', this)">📝 Заметки</button>
+        </nav>
+
+        <!-- SECTION 1: ДНЕВНИК -->
+        <section id="sec-journal" class="page-section active">
+            <div id="grid-view" class="days-grid"></div>
+        </section>
+
+        <!-- SECTION 2: СТАТИСТИКА -->
+        <section id="sec-stats" class="page-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Заполнено дней</h3>
+                    <div class="value" id="stat-filled-days">0 / 31</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Средняя энергия</h3>
+                    <div class="value" id="stat-avg-energy">0.0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Прогресс месяца</h3>
+                    <div class="value" id="stat-progress">0%</div>
+                </div>
             </div>
 
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-action" onclick="exportData()">💾 Скачать бэкап</button>
-                <button class="btn-action" onclick="resetData()" style="color: #f87171;">🗑 Сброс</button>
+            <div class="chart-box">
+                <h2 style="font-size: 16px; margin-bottom: 16px; color: #a5b4fc;">📈 Динамика уровня энергии</h2>
+                <canvas id="energyChart" height="100"></canvas>
             </div>
-        </div>
+        </section>
 
-        <!-- CARDS VIEW -->
-        <div id="grid-view" class="days-grid"></div>
-
-        <!-- TABLE VIEW -->
-        <div id="table-view" class="table-view-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 50px; text-align: center;">День</th>
-                        <th style="width: 90px;">⚡ Энергия</th>
-                        <th style="width: 20%;">🚫 Отказ дня</th>
-                        <th style="width: 25%;">💡 Ошибка → Урок</th>
-                        <th style="width: 22%;">🔥 Моё слово</th>
-                        <th style="width: 23%;">🎭 Где был не собой?</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
+        <!-- SECTION 3: ЗАМЕТКИ -->
+        <section id="sec-notes" class="page-section">
+            <div class="notes-area">
+                <h2 style="font-size: 16px; margin-bottom: 12px; color: #a5b4fc;">📝 Пространство свободного ввода / Мысли недели</h2>
+                <textarea id="free-notes" placeholder="Записывай сюда инсайты, важные задачи, цели на месяц или свободные размышления..." oninput="saveData()"></textarea>
+            </div>
+        </section>
     </div>
 
     <script>
-        const TOTAL_DAYS = 30;
+        const TOTAL_DAYS = 31;
         let journalData = {};
+        let energyChartInstance = null;
+
+        const now = new Date();
+        const currentDayNum = now.getDate();
+        const formattedDate = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 
         function initData() {
+            document.getElementById('today-date-display').innerText = `📅 Сегодня: ${formattedDate}`;
+
             const saved = localStorage.getItem('reflection_journal_db');
             if (saved) {
-                try {
-                    journalData = JSON.parse(saved);
-                } catch(e) { journalData = {}; }
+                try { journalData = JSON.parse(saved); } catch(e) { journalData = {}; }
             }
             
+            if (journalData.userFullname) document.getElementById('user-fullname').value = journalData.userFullname;
             if (journalData.metaMonth) document.getElementById('meta-month').value = journalData.metaMonth;
-            if (journalData.metaPatch) document.getElementById('meta-patch').value = journalData.metaPatch;
+            if (journalData.freeNotes) document.getElementById('free-notes').value = journalData.freeNotes;
 
             renderGrid();
-            renderTable();
+        }
+
+        function openSection(secName, btn) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(`sec-${secName}`).classList.add('active');
+            btn.classList.add('active');
+
+            if (secName === 'stats') {
+                renderAnalytics();
+            }
         }
 
         function saveData() {
+            journalData.userFullname = document.getElementById('user-fullname').value;
             journalData.metaMonth = document.getElementById('meta-month').value;
-            journalData.metaPatch = document.getElementById('meta-patch').value;
+            journalData.freeNotes = document.getElementById('free-notes').value;
 
             for (let i = 1; i <= TOTAL_DAYS; i++) {
                 const dayKey = `day_${i}`;
@@ -446,136 +456,120 @@
                 }
             }
             localStorage.setItem('reflection_journal_db', JSON.stringify(journalData));
-            syncViews();
-        }
-
-        function syncViews() {
-            for (let i = 1; i <= TOTAL_DAYS; i++) {
-                const dayKey = `day_${i}`;
-                const data = journalData[dayKey] || {};
-
-                const energyTab = document.getElementById(`energy-tab-${i}`);
-                if (energyTab && document.activeElement !== energyTab) energyTab.value = data.energy || '';
-                
-                const refusalTab = document.getElementById(`refusal-tab-${i}`);
-                if (refusalTab && document.activeElement !== refusalTab) refusalTab.value = data.refusal || '';
-
-                const lessonTab = document.getElementById(`lesson-tab-${i}`);
-                if (lessonTab && document.activeElement !== lessonTab) lessonTab.value = data.lesson || '';
-
-                const wordTab = document.getElementById(`word-tab-${i}`);
-                if (wordTab && document.activeElement !== wordTab) wordTab.value = data.word || '';
-
-                const selfTab = document.getElementById(`self-tab-${i}`);
-                if (selfTab && document.activeElement !== selfTab) selfTab.value = data.self || '';
-            }
         }
 
         function renderGrid() {
             const grid = document.getElementById('grid-view');
             grid.innerHTML = '';
 
-            for (let i = 1; i <= TOTAL_DAYS; i++) {
+            for (let i = TOTAL_DAYS; i >= 1; i--) {
                 const dayKey = `day_${i}`;
                 const data = journalData[dayKey] || {};
+                const isToday = (i === currentDayNum);
 
                 const card = document.createElement('div');
-                card.className = 'day-card';
+                card.className = `day-card ${isToday ? 'today-card' : ''}`;
                 card.innerHTML = `
                     <div class="day-card-header">
-                        <span class="day-badge">День ${i}</span>
+                        <span class="day-badge ${isToday ? 'today-badge' : ''}">${isToday ? '🔥 Сегодня (День ' + i + ')' : 'День ' + i}</span>
                         <div class="energy-selector">
-                            <label>⚡ Энергия</label>
+                            <label style="font-size: 11px; color: var(--text-muted);">⚡ Энергия</label>
                             <input type="number" min="1" max="10" id="energy-card-${i}" class="energy-input" value="${data.energy || ''}" placeholder="1-10" oninput="saveData()">
                         </div>
                     </div>
-
                     <div class="field-group">
-                        <label>🚫 Отказ дня (чему сказал «нет»)</label>
-                        <textarea id="refusal-card-${i}" placeholder="Например: отложил телефон..." oninput="saveData()">${data.refusal || ''}</textarea>
+                        <label>🚫 Отказ дня</label>
+                        <textarea id="refusal-card-${i}" placeholder="Чему сказал «нет»..." oninput="saveData()">${data.refusal || ''}</textarea>
                     </div>
-
                     <div class="field-group">
-                        <label>💡 Ошибка → Урок (что понял)</label>
-                        <textarea id="lesson-card-${i}" placeholder="Понял, что нужно..." oninput="saveData()">${data.lesson || ''}</textarea>
+                        <label>💡 Ошибка → Урок</label>
+                        <textarea id="lesson-card-${i}" placeholder="Что понял..." oninput="saveData()">${data.lesson || ''}</textarea>
                     </div>
-
                     <div class="field-group">
-                        <label>🔥 Моё слово (фраза-влияние)</label>
-                        <textarea id="word-card-${i}" placeholder="Фокус и дисциплина..." oninput="saveData()">${data.word || ''}</textarea>
+                        <label>🔥 Моё слово</label>
+                        <textarea id="word-card-${i}" placeholder="Фраза дня..." oninput="saveData()">${data.word || ''}</textarea>
                     </div>
-
                     <div class="field-group">
                         <label>🎭 Где был не собой?</label>
-                        <textarea id="self-card-${i}" placeholder="Смог ли сохранить осознанность..." oninput="saveData()">${data.self || ''}</textarea>
+                        <textarea id="self-card-${i}" placeholder="Осознанность..." oninput="saveData()">${data.self || ''}</textarea>
                     </div>
                 `;
                 grid.appendChild(card);
             }
         }
 
-        function renderTable() {
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = '';
+        function renderAnalytics() {
+            const labels = [];
+            const energyValues = [];
+            let filledDays = 0;
+            let totalEnergy = 0;
+            let energyCount = 0;
 
             for (let i = 1; i <= TOTAL_DAYS; i++) {
-                const dayKey = `day_${i}`;
-                const data = journalData[dayKey] || {};
+                labels.push(`День ${i}`);
+                const dayData = journalData[`day_${i}`];
+                
+                if (dayData && (dayData.refusal || dayData.lesson || dayData.word || dayData.self || dayData.energy)) {
+                    filledDays++;
+                }
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="day-num">${i}</td>
-                    <td>
-                        <input type="number" min="1" max="10" id="energy-tab-${i}" class="energy-input" style="width:100%" value="${data.energy || ''}" oninput="syncFromTable(${i})">
-                    </td>
-                    <td><textarea id="refusal-tab-${i}" oninput="syncFromTable(${i})">${data.refusal || ''}</textarea></td>
-                    <td><textarea id="lesson-tab-${i}" oninput="syncFromTable(${i})">${data.lesson || ''}</textarea></td>
-                    <td><textarea id="word-tab-${i}" oninput="syncFromTable(${i})">${data.word || ''}</textarea></td>
-                    <td><textarea id="self-tab-${i}" oninput="syncFromTable(${i})">${data.self || ''}</textarea></td>
-                `;
-                tbody.appendChild(tr);
-            }
-        }
-
-        function syncFromTable(dayIndex) {
-            const dayKey = `day_${dayIndex}`;
-            if (!journalData[dayKey]) journalData[dayKey] = {};
-
-            journalData[dayKey].energy = document.getElementById(`energy-tab-${dayIndex}`).value;
-            journalData[dayKey].refusal = document.getElementById(`refusal-tab-${dayIndex}`).value;
-            journalData[dayKey].lesson = document.getElementById(`lesson-tab-${dayIndex}`).value;
-            journalData[dayKey].word = document.getElementById(`word-tab-${dayIndex}`).value;
-            journalData[dayKey].self = document.getElementById(`self-tab-${dayIndex}`).value;
-
-            const energyCard = document.getElementById(`energy-card-${dayIndex}`);
-            if (energyCard) {
-                energyCard.value = journalData[dayKey].energy;
-                document.getElementById(`refusal-card-${dayIndex}`).value = journalData[dayKey].refusal;
-                document.getElementById(`lesson-card-${dayIndex}`).value = journalData[dayKey].lesson;
-                document.getElementById(`word-card-${dayIndex}`).value = journalData[dayKey].word;
-                document.getElementById(`self-card-${dayIndex}`).value = journalData[dayKey].self;
+                if (dayData && dayData.energy) {
+                    const energyNum = parseFloat(dayData.energy);
+                    energyValues.push(energyNum);
+                    totalEnergy += energyNum;
+                    energyCount++;
+                } else {
+                    energyValues.push(null);
+                }
             }
 
-            localStorage.setItem('reflection_journal_db', JSON.stringify(journalData));
-        }
+            document.getElementById('stat-filled-days').innerText = `${filledDays} / ${TOTAL_DAYS}`;
+            document.getElementById('stat-avg-energy').innerText = energyCount > 0 ? (totalEnergy / energyCount).toFixed(1) : '0.0';
+            document.getElementById('stat-progress').innerText = `${Math.round((filledDays / TOTAL_DAYS) * 100)}%`;
 
-        function switchView(view) {
-            const grid = document.getElementById('grid-view');
-            const table = document.getElementById('table-view');
-            const btnGrid = document.getElementById('btn-grid');
-            const btnTable = document.getElementById('btn-table');
-
-            if (view === 'grid') {
-                grid.style.display = 'grid';
-                table.style.display = 'none';
-                btnGrid.classList.add('active');
-                btnTable.classList.remove('active');
-            } else {
-                grid.style.display = 'none';
-                table.style.display = 'block';
-                btnTable.classList.add('active');
-                btnGrid.classList.remove('active');
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            
+            if (energyChartInstance) {
+                energyChartInstance.destroy();
             }
+
+            energyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Уровень энергии (1-10)',
+                        data: energyValues,
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#ec4899',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f8fafc' }
+                        }
+                    }
+                }
+            });
         }
 
         function exportData() {
@@ -600,4 +594,3 @@
     </script>
 </body>
 </html>
- этого кода создай э-э приложение, которое можно прямо здесь открыть.
