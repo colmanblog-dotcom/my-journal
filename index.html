@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Трекер Целей & Голосовой Ввод</title>
+    <title>⚡ Расширенный Трекер Дня & Аналитика</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -145,16 +145,15 @@
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
         }
 
-        .energy-input {
-            width: 60px;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: #fbbf24;
+        .section-title {
+            font-size: 14px;
             font-weight: 800;
-            text-align: center;
-            padding: 6px 8px;
-            border-radius: 8px;
-            font-size: 16px;
+            color: #a5b4fc;
+            margin: 20px 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 8px;
         }
 
         .field-group {
@@ -202,7 +201,7 @@
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        .field-group textarea {
+        .field-group textarea, .field-group input[type="text"], .field-group select {
             width: 100%;
             background: var(--input-bg);
             border: 1px solid var(--input-border);
@@ -210,9 +209,22 @@
             color: #fff;
             padding: 12px;
             font-size: 14px;
+            outline: none;
+        }
+
+        .field-group textarea {
             resize: vertical;
             min-height: 55px;
-            outline: none;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .grid-2 { grid-template-columns: 1fr; }
         }
 
         .btn-save {
@@ -222,12 +234,12 @@
             color: #fff;
             font-weight: 800;
             font-size: 16px;
-            padding: 14px;
+            padding: 16px;
             border-radius: var(--radius-md);
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
             transition: all 0.2s;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .stats-grid {
@@ -345,15 +357,31 @@
             <div class="today-card">
                 <div class="today-card-header">
                     <span class="today-badge">🎯 Карточка Дня</span>
-                    <div>
-                        <label style="font-size: 11px; color: var(--text-muted);">⚡ Энергия: </label>
-                        <input type="number" min="1" max="10" id="today-energy" class="energy-input" placeholder="1-10">
+                </div>
+
+                <!-- БЛОК 1: ТРЕКИНГ СОСТОЯНИЯ -->
+                <div class="section-title">⚡ Состояние и Дисциплина</div>
+                <div class="grid-2">
+                    <div class="field-group">
+                        <label>⚡ Энергия (1-10)</label>
+                        <input type="number" min="1" max="10" id="today-energy" placeholder="Напр. 8">
+                    </div>
+                    <div class="field-group">
+                        <label>🏃 Спорт / Активность</label>
+                        <select id="today-sport">
+                            <option value="Нет">❌ Без активности</option>
+                            <option value="Легкая">🚶 Прогулка / Зарядка</option>
+                            <option value="Тренировка">🏋️ Полноценная тренировка</option>
+                            <option value="Кардио">🚴 Кардио / Бег / Вел</option>
+                        </select>
                     </div>
                 </div>
 
+                <!-- БЛОК 2: ЦЕЛИ И ЗАДАЧИ -->
+                <div class="section-title">🎯 Главный Фокус Дня</div>
                 <div class="field-group">
                     <div class="label-row">
-                        <label>🎯 Главная цель дня</label>
+                        <label>🎯 Главная цель / Задача дня</label>
                         <button class="btn-mic" onclick="startVoice('today-goal', this)">🎤 Продиктовать</button>
                     </div>
                     <textarea id="today-goal" placeholder="Какую главную цель закрываем сегодня?"></textarea>
@@ -361,26 +389,54 @@
 
                 <div class="field-group">
                     <div class="label-row">
+                        <label>📌 Второстепенные задачи (через запятую)</label>
+                        <button class="btn-mic" onclick="startVoice('today-subgoals', this)">🎤 Продиктовать</button>
+                    </div>
+                    <input type="text" id="today-subgoals" placeholder="Например: отправить письмо, купить продукты, позвонить...">
+                </div>
+
+                <!-- БЛОК 3: ИТОГИ И МЫСЛИ -->
+                <div class="section-title">🧠 Итоги & Осознанность</div>
+                
+                <div class="field-group">
+                    <div class="label-row">
+                        <label>🏆 Главная победа дня</label>
+                        <button class="btn-mic" onclick="startVoice('today-victory', this)">🎤 Продиктовать</button>
+                    </div>
+                    <textarea id="today-victory" placeholder="Что сегодня получилось лучше всего? В чём красавчик?"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <div class="label-row">
+                        <label>❤️ За что благодарен сегодня</label>
+                        <button class="btn-mic" onclick="startVoice('today-thanks', this)">🎤 Продиктовать</button>
+                    </div>
+                    <textarea id="today-thanks" placeholder="Кому или чему благодарен..."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <div class="label-row">
                         <label>🚫 Отказ дня</label>
                         <button class="btn-mic" onclick="startVoice('today-refusal', this)">🎤 Продиктовать</button>
                     </div>
-                    <textarea id="today-refusal" placeholder="Чему сказал «нет»..."></textarea>
+                    <textarea id="today-refusal" placeholder="Чему или кому сказал «нет»..."></textarea>
                 </div>
 
-                <div class="field-group">
-                    <div class="label-row">
-                        <label>💡 Главный урок / Инсайт</label>
-                        <button class="btn-mic" onclick="startVoice('today-lesson', this)">🎤 Продиктовать</button>
+                <div class="grid-2">
+                    <div class="field-group">
+                        <div class="label-row">
+                            <label>💡 Главный урок</label>
+                            <button class="btn-mic" onclick="startVoice('today-lesson', this)">🎤</button>
+                        </div>
+                        <textarea id="today-lesson" placeholder="Что понял за день..."></textarea>
                     </div>
-                    <textarea id="today-lesson" placeholder="Что понял за сегодня..."></textarea>
-                </div>
-
-                <div class="field-group">
-                    <div class="label-row">
-                        <label>🔥 Слово дня</label>
-                        <button class="btn-mic" onclick="startVoice('today-word', this)">🎤 Продиктовать</button>
+                    <div class="field-group">
+                        <div class="label-row">
+                            <label>🔥 Слово дня</label>
+                            <button class="btn-mic" onclick="startVoice('today-word', this)">🎤</button>
+                        </div>
+                        <textarea id="today-word" placeholder="Девиз дня..."></textarea>
                     </div>
-                    <textarea id="today-word" placeholder="Девиз или мысль дня..."></textarea>
                 </div>
 
                 <button class="btn-save" onclick="saveToday()">Сохранить день и отправить в статистику ✅</button>
@@ -433,12 +489,11 @@
             loadTodayData();
         }
 
-        /* ЛОГИКА ГОЛОСОВОГО ВВОДА */
         function startVoice(targetId, btn) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
             if (!SpeechRecognition) {
-                alert("К сожалению, твой браузер не поддерживает прямое распознавание речи. Воспользуйся стандартным диктовщиком на клавиатуре айфона (значок микрофона на клавиатуре).");
+                alert("Ваш браузер не поддерживает прямое распознавание. Используйте микрофон на клавиатуре устройства.");
                 return;
             }
 
@@ -448,16 +503,16 @@
 
             recognition.onstart = function() {
                 btn.classList.add('recording');
-                btn.innerHTML = '🔴 Слушаю...';
+                btn.innerHTML = '🔴...';
             };
 
             recognition.onresult = function(event) {
                 const text = event.results[0][0].transcript;
-                const textarea = document.getElementById(targetId);
-                if (textarea.value) {
-                    textarea.value += ' ' + text;
+                const field = document.getElementById(targetId);
+                if (field.value) {
+                    field.value += ' ' + text;
                 } else {
-                    textarea.value = text;
+                    field.value = text;
                 }
             };
 
@@ -467,7 +522,7 @@
 
             recognition.onend = function() {
                 btn.classList.remove('recording');
-                btn.innerHTML = '🎤 Продиктовать';
+                btn.innerHTML = '🎤';
             };
 
             recognition.start();
@@ -477,7 +532,11 @@
             const todayRecord = db.find(item => item.date === todayKey);
             if (todayRecord) {
                 document.getElementById('today-energy').value = todayRecord.energy || '';
+                document.getElementById('today-sport').value = todayRecord.sport || 'Нет';
                 document.getElementById('today-goal').value = todayRecord.goal || '';
+                document.getElementById('today-subgoals').value = todayRecord.subgoals || '';
+                document.getElementById('today-victory').value = todayRecord.victory || '';
+                document.getElementById('today-thanks').value = todayRecord.thanks || '';
                 document.getElementById('today-refusal').value = todayRecord.refusal || '';
                 document.getElementById('today-lesson').value = todayRecord.lesson || '';
                 document.getElementById('today-word').value = todayRecord.word || '';
@@ -485,24 +544,21 @@
         }
 
         function saveToday() {
-            const energy = document.getElementById('today-energy').value;
-            const goal = document.getElementById('today-goal').value;
-            const refusal = document.getElementById('today-refusal').value;
-            const lesson = document.getElementById('today-lesson').value;
-            const word = document.getElementById('today-word').value;
-
-            const existingIndex = db.findIndex(item => item.date === todayKey);
-
             const record = {
                 date: todayKey,
                 formattedDate: formattedDate,
-                energy: energy,
-                goal: goal,
-                refusal: refusal,
-                lesson: lesson,
-                word: word
+                energy: document.getElementById('today-energy').value,
+                sport: document.getElementById('today-sport').value,
+                goal: document.getElementById('today-goal').value,
+                subgoals: document.getElementById('today-subgoals').value,
+                victory: document.getElementById('today-victory').value,
+                thanks: document.getElementById('today-thanks').value,
+                refusal: document.getElementById('today-refusal').value,
+                lesson: document.getElementById('today-lesson').value,
+                word: document.getElementById('today-word').value
             };
 
+            const existingIndex = db.findIndex(item => item.date === todayKey);
             if (existingIndex >= 0) {
                 db[existingIndex] = record;
             } else {
@@ -510,7 +566,7 @@
             }
 
             localStorage.setItem('daily_goals_db', JSON.stringify(db));
-            alert('День успешно сохранён и улетел в статистику! 🚀');
+            alert('День сохранён! 🚀');
         }
 
         function openSection(secName, btn) {
@@ -605,7 +661,7 @@
             container.innerHTML = '';
 
             if (db.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">История пока пуста. Заполни свой первый день!</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">История пока пуста.</p>';
                 return;
             }
 
@@ -615,8 +671,11 @@
                 const card = document.createElement('div');
                 card.className = 'history-card';
                 card.innerHTML = `
-                    <div class="history-date">📅 ${item.formattedDate} ${item.energy ? ' (⚡ Энергия: ' + item.energy + ')' : ''}</div>
+                    <div class="history-date">📅 ${item.formattedDate} ${item.energy ? ' (⚡ ' + item.energy + '/10)' : ''} ${item.sport && item.sport !== 'Нет' ? ' | 🏃 ' + item.sport : ''}</div>
                     ${item.goal ? '<p style="font-size:13px; margin-bottom:4px;"><b>🎯 Цель:</b> ' + item.goal + '</p>' : ''}
+                    ${item.subgoals ? '<p style="font-size:13px; margin-bottom:4px;"><b>📌 Задачи:</b> ' + item.subgoals + '</p>' : ''}
+                    ${item.victory ? '<p style="font-size:13px; margin-bottom:4px; color:#10b981;"><b>🏆 Победа:</b> ' + item.victory + '</p>' : ''}
+                    ${item.thanks ? '<p style="font-size:13px; margin-bottom:4px;"><b>❤️ Благодарность:</b> ' + item.thanks + '</p>' : ''}
                     ${item.refusal ? '<p style="font-size:13px; margin-bottom:4px;"><b>🚫 Отказ:</b> ' + item.refusal + '</p>' : ''}
                     ${item.lesson ? '<p style="font-size:13px; margin-bottom:4px;"><b>💡 Урок:</b> ' + item.lesson + '</p>' : ''}
                     ${item.word ? '<p style="font-size:13px;"><b>🔥 Слово:</b> ' + item.word + '</p>' : ''}
