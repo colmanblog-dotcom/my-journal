@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Life Dashboard v6.1 — Stories</title>
+    <title>⚡ Life Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ===================================================================
-           ROOT VARIABLES
+           ROOT VARIABLES — ВСЕ ТЕМЫ
            =================================================================== */
         :root[data-theme="cyber"] {
             --bg: #090d16;
@@ -655,15 +655,6 @@
         }
         .today-card>* { position: relative; z-index: 1; }
 
-        .today-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--card-border);
-        }
-
         /* ---------- ТАБЫ ВНУТРИ СЕГОДНЯ ---------- */
         .today-tabs {
             display: flex;
@@ -710,9 +701,7 @@
             background: var(--accent-primary);
             border-radius: 2px;
         }
-        .today-tabs .tab-btn .icon {
-            margin-right: 2px;
-        }
+        .today-tabs .tab-btn .icon { margin-right: 2px; }
         .today-tabs .tab-btn .status-dot {
             width: 6px;
             height: 6px;
@@ -767,9 +756,7 @@
             display: none;
             animation: fadeIn 0.3s ease;
         }
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content.active { display: block; }
 
         /* Свёрнутая вкладка (после сохранения) */
         .tab-content .tab-collapsed {
@@ -780,9 +767,7 @@
             border: 1px solid var(--card-border);
             margin-bottom: 12px;
         }
-        .tab-content .tab-collapsed.visible {
-            display: block;
-        }
+        .tab-content .tab-collapsed.visible { display: block; }
         .tab-content .tab-collapsed .header {
             display: flex;
             justify-content: space-between;
@@ -836,12 +821,8 @@
             border-color: var(--accent-primary);
         }
 
-        .tab-content .tab-fields {
-            display: block;
-        }
-        .tab-content .tab-fields.hidden {
-            display: none;
-        }
+        .tab-content .tab-fields { display: block; }
+        .tab-content .tab-fields.hidden { display: none; }
 
         .section-title {
             font-size: 10px;
@@ -854,7 +835,12 @@
             padding-left: 8px;
         }
         .field-group { margin-bottom: 10px; }
-        .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+        }
         .field-group label {
             font-size: 9px;
             font-weight: 700;
@@ -1010,15 +996,61 @@
             transform: none;
         }
 
+        /* ---------- БАННЕР: ДЕНЬ ЗАПОЛНЕН ---------- */
+        .day-locked-banner {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fff;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .day-locked-banner.visible { display: flex; }
+        .day-locked-banner .info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 12px;
+        }
+        .day-locked-banner .info .date { font-weight: 800; font-size: 14px; }
+        .day-locked-banner .info .stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        .day-locked-banner .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .day-locked-banner .actions button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(4px);
+        }
+        .day-locked-banner .actions button:hover {
+            background: rgba(255,255,255,0.35);
+            transform: scale(1.03);
+        }
+
         /* ===================================================================
            DAY SUMMARY (вкладка Основное после завершения дня)
            =================================================================== */
         .day-summary {
             display: none;
         }
-        .day-summary.visible {
-            display: block;
-        }
+        .day-summary.visible { display: block; }
         .day-summary .summary-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1043,9 +1075,7 @@
             color: var(--text-main);
             margin-top: 2px;
         }
-        .day-summary .summary-card .value .highlight {
-            color: var(--accent-primary);
-        }
+        .day-summary .summary-card .value .highlight { color: var(--accent-primary); }
         .day-summary .summary-section {
             background: var(--input-bg);
             border-radius: 10px;
@@ -1372,9 +1402,7 @@
             background: var(--accent-primary);
             display: none;
         }
-        .calendar-grid .day-cell.has-record .dot {
-            display: block;
-        }
+        .calendar-grid .day-cell.has-record .dot { display: block; }
 
         .calendar-legend {
             display: flex;
@@ -1521,29 +1549,16 @@
                 transform: translateX(-100%);
                 width: 240px;
             }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .sidebar-overlay.visible {
-                display: block;
-            }
-            .hamburger {
-                display: block;
-            }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.visible { display: block; }
+            .hamburger { display: block; }
             .main-content {
                 margin-left: 0;
                 padding: 60px 12px 100px;
             }
-            .main-content .container {
-                max-width: 100%;
-            }
-            .today-tabs .tab-btn {
-                font-size: 10px;
-                padding: 4px 10px;
-            }
-            .day-summary .summary-grid {
-                grid-template-columns: 1fr;
-            }
+            .main-content .container { max-width: 100%; }
+            .today-tabs .tab-btn { font-size: 10px; padding: 4px 10px; }
+            .day-summary .summary-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 580px) {
@@ -1682,10 +1697,6 @@
             ============================================================ -->
             <section id="sec-today" class="page-section active">
                 <div class="today-card">
-                    <div class="today-card-header">
-                        <span style="background: var(--accent-primary); color:#fff; font-weight:800; font-size:10px; padding:3px 12px; border-radius:16px;">📅 Карточка дня</span>
-                        <span id="today-status" style="font-size:10px; color:var(--text-muted);"></span>
-                    </div>
 
                     <!-- БАННЕР: ДЕНЬ ЗАПОЛНЕН -->
                     <div class="day-locked-banner" id="day-locked-banner">
@@ -2523,7 +2534,6 @@
             document.querySelectorAll('.today-tabs .tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             if (btn) btn.classList.add('active');
-            // Обновляем состояние вкладки при переключении
             TabManager.updateTabState(tabId);
         }
 
@@ -2619,7 +2629,6 @@
                             dot.className = 'status-dot empty';
                         }
                     }
-                    // Обновляем состояние вкладки
                     this.updateTabState(tab);
                 });
 
@@ -2630,7 +2639,6 @@
                 if (fillEl) fillEl.style.width = percent + '%';
                 if (textEl) textEl.textContent = `${filled}/${total}`;
 
-                // Проверяем, все ли вкладки заполнены
                 const record = this._getRecord();
                 if (filled === total) {
                     this._lockDay(record);
@@ -2638,7 +2646,6 @@
                     this._unlockDay();
                 }
 
-                // Обновляем сводку дня
                 this._updateSummary(record);
             },
 
@@ -2652,7 +2659,6 @@
                 document.getElementById('today-status').textContent = '✅ День заполнен';
                 document.getElementById('today-status').style.color = 'var(--success)';
 
-                // Показываем сводку в вкладке "Основное"
                 const summary = document.getElementById('day-summary');
                 summary.classList.add('visible');
             },
@@ -2700,7 +2706,6 @@
                 if (isFilled) {
                     if (fields) fields.style.display = 'none';
                     if (collapsed) collapsed.style.display = 'block';
-                    // Заполняем collapsed данными
                     this._fillCollapsed(tabName);
                 } else {
                     if (fields) fields.style.display = 'block';
@@ -2772,7 +2777,6 @@
                     formattedDate: DayManager.formattedDate
                 };
 
-                // Собираем данные из текущей вкладки
                 if (tabName === 'main') {
                     record.energy = document.getElementById('today-energy').value;
                     record.sport = document.getElementById('today-sport').value;
@@ -2813,7 +2817,6 @@
                     record.soul.note = document.getElementById('soul-note').value.trim();
                 }
 
-                // Сохраняем
                 let entries = Store.getAll();
                 const existingIndex = entries.findIndex(item => item.date === DayManager.todayKey);
                 if (existingIndex >= 0) {
@@ -2825,10 +2828,8 @@
 
                 Toast.show(`✅ Вкладка «${this._getTabLabel(tabName)}» сохранена!`, 'success');
 
-                // Обновляем UI
                 this._updateUI();
                 document.getElementById('streak-count').textContent = Store.getStreak();
-                // Обновляем дату
                 UI.updateDate();
             },
 
@@ -2844,12 +2845,10 @@
             },
 
             editTab(tabName) {
-                // Разблокируем поля вкладки
                 const fields = document.getElementById(`tab-${tabName}-fields`);
                 const collapsed = document.getElementById(`collapsed-${tabName}`);
                 if (fields) {
                     fields.style.display = 'block';
-                    // Активируем все поля
                     fields.querySelectorAll('input, textarea, select').forEach(el => el.disabled = false);
                 }
                 if (collapsed) collapsed.style.display = 'none';
@@ -2862,10 +2861,8 @@
             },
 
             load() {
-                // Загружаем данные в поля из записи
                 const record = Store.findToday();
                 if (record) {
-                    // Заполняем поля
                     if (record.energy) {
                         document.getElementById('today-energy').value = record.energy;
                         document.getElementById('energy-val').innerText = record.energy;
@@ -2927,10 +2924,8 @@
                     }
                 }
 
-                // Обновляем UI
                 this._updateUI();
                 this._updateSummary(record);
-                // Обновляем состояние всех вкладок
                 ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
                     this.updateTabState(tab);
                 });
@@ -2948,7 +2943,7 @@
         };
 
         // ===================================================================
-        //  DAY MANAGER (основной контроллер)
+        //  DAY MANAGER
         // ===================================================================
         const DayManager = {
             get todayKey() { return new Date().toISOString().slice(0, 10); },
@@ -2962,7 +2957,6 @@
             },
 
             enableEdit() {
-                // Разблокируем все вкладки для редактирования
                 ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
                     TabManager.editTab(tab);
                 });
@@ -3556,7 +3550,6 @@
                     const cityAge = [profile.city, profile.age ? profile.age + ' лет' : ''].filter(Boolean).join(' • ');
                     const streak = Store.getStreak();
 
-                    // Берём последний день
                     const sorted = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
                     const day = sorted[0] || {};
                     const body = day.body || {};
