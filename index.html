@@ -38,7 +38,7 @@
             background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
-            padding: 20px 16px 100px; /* Запас снизу под мобильное меню */
+            padding: 20px 16px 100px;
         }
 
         .container {
@@ -281,11 +281,36 @@
             color: #a5b4fc;
         }
 
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
         .chart-box {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-lg);
             padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-box h2 {
+            font-size: 15px;
+            margin-bottom: 16px;
+            color: #a5b4fc;
+            width: 100%;
+            text-align: left;
+        }
+
+        .donut-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 260px;
+            height: 260px;
         }
 
         /* NOTES SECTION */
@@ -328,6 +353,7 @@
             .meta-group { width: 100%; }
             .days-grid { grid-template-columns: 1fr; }
             .nav-item { font-size: 12px; padding: 10px 8px; }
+            .charts-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -386,8 +412,26 @@
                 </div>
             </div>
 
-            <div class="chart-box">
-                <h2 style="font-size: 16px; margin-bottom: 16px; color: #a5b4fc;">📈 Динамика уровня энергии</h2>
+            <!-- КРУГЛЫЕ ГРАФИКИ (DONUT CHARTS) -->
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h2>🍩 Дисциплина (Заполнение)</h2>
+                    <div class="donut-wrapper">
+                        <canvas id="progressDonutChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <h2>🎯 Распределение Энергии</h2>
+                    <div class="donut-wrapper">
+                        <canvas id="energyCategoryDonutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЛИНЕЙНЫЙ ГРАФИК -->
+            <div class="chart-box" style="align-items: stretch;">
+                <h2>📈 Динамика уровня энергии по дням</h2>
                 <canvas id="energyChart" height="100"></canvas>
             </div>
         </section>
@@ -404,7 +448,10 @@
     <script>
         const TOTAL_DAYS = 31;
         let journalData = {};
+        
         let energyChartInstance = null;
+        let progressDonutInstance = null;
+        let energyCategoryDonutInstance = null;
 
         const now = new Date();
         const currentDayNum = now.getDate();
@@ -505,6 +552,10 @@
             let totalEnergy = 0;
             let energyCount = 0;
 
+            let highEnergyDays = 0;   // 8 - 10
+            let medEnergyDays = 0;    // 5 - 7
+            let lowEnergyDays = 0;    // 1 - 4
+
             for (let i = 1; i <= TOTAL_DAYS; i++) {
                 labels.push(`День ${i}`);
                 const dayData = journalData[`day_${i}`];
@@ -518,6 +569,10 @@
                     energyValues.push(energyNum);
                     totalEnergy += energyNum;
                     energyCount++;
+
+                    if (energyNum >= 8) highEnergyDays++;
+                    else if (energyNum >= 5) medEnergyDays++;
+                    else if (energyNum >= 1) lowEnergyDays++;
                 } else {
                     energyValues.push(null);
                 }
@@ -527,11 +582,49 @@
             document.getElementById('stat-avg-energy').innerText = energyCount > 0 ? (totalEnergy / energyCount).toFixed(1) : '0.0';
             document.getElementById('stat-progress').innerText = `${Math.round((filledDays / TOTAL_DAYS) * 100)}%`;
 
+            // 1. КРУГОВОЙ ГРАФИК ПРОГРЕССА (Заполнено vs Пропущено)
+            const ctxProgress = document.getElementById('progressDonutChart').getContext('2d');
+            if (progressDonutInstance) progressDonutInstance.destroy();
+            progressDonutInstance = new Chart(ctxProgress, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Заполнено', 'Осталось'],
+                    datasets: [{
+                        data: [filledDays, TOTAL_DAYS - filledDays],
+                        backgroundColor: ['#6366f1', 'rgba(255,255,255,0.08)'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#f8fafc' } } }
+                }
+            });
+
+            // 2. КРУГОВОЙ ГРАФИК КАТЕГОРИЙ ЭНЕРГИИ
+            const ctxEnergyCat = document.getElementById('energyCategoryDonutChart').getContext('2d');
+            if (energyCategoryDonutInstance) energyCategoryDonutInstance.destroy();
+            energyCategoryDonutInstance = new Chart(ctxEnergyCat, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Высокая (8-10)', 'Средняя (5-7)', 'Низкая (1-4)'],
+                    datasets: [{
+                        data: [highEnergyDays, medEnergyDays, lowEnergyDays],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#f8fafc' } } }
+                }
+            });
+
+            // 3. ЛИНЕЙНЫЙ ГРАФИК ДИНАМИКИ
             const ctx = document.getElementById('energyChart').getContext('2d');
-            
-            if (energyChartInstance) {
-                energyChartInstance.destroy();
-            }
+            if (energyChartInstance) energyChartInstance.destroy();
 
             energyChartInstance = new Chart(ctx, {
                 type: 'line',
@@ -564,9 +657,7 @@
                         }
                     },
                     plugins: {
-                        legend: {
-                            labels: { color: '#f8fafc' }
-                        }
+                        legend: { labels: { color: '#f8fafc' } }
                     }
                 }
             });
