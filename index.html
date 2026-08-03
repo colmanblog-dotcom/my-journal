@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Дневник Осознанности & Рефлексии</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090d16;
+            --card-bg: rgba(22, 30, 46, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-primary: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.35);
+            --accent-pink: #ec4899;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(15, 23, 42, 0.6);
+            --input-border: rgba(255, 255, 255, 0.12);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px 16px 60px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-area h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-area p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .meta-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .meta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-group label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .meta-group input {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-md);
+            color: #fff;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .meta-group input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        /* NAVBAR & CONTROLS */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .view-switch {
+            display: flex;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--card-border);
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: var(--accent-primary);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .btn-action {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--card-border);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-1px);
+        }
+
+        /* GRID CARDS VIEW */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+        }
+
+        .day-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .day-badge {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px var(--accent-glow);
+        }
+
+        .energy-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .energy-selector label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .energy-input {
+            width: 55px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: #fbbf24;
+            font-weight: 800;
+            text-align: center;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .field-group {
+            margin-bottom: 14px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field-group textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-md);
+            color: #fff;
+            padding: 10px 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            resize: vertical;
+            min-height: 48px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .field-group textarea:focus {
+            border-color: var(--accent-primary);
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        /* TABLE VIEW */
+        .table-view-container {
+            display: none;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 900px;
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 14px 16px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 700;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            vertical-align: top;
+        }
+
+        td.day-num {
+            font-weight: 800;
+            color: #a5b4fc;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        td textarea {
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            color: #fff;
+            font-size: 12.5px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            resize: vertical;
+            min-height: 38px;
+            outline: none;
+        }
+
+        td textarea:focus {
+            background: var(--input-bg);
+            border-color: var(--accent-primary);
+        }
+
+        @media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .meta-controls {
+                width: 100%;
+                flex-direction: column;
+            }
+            .meta-group {
+                width: 100%;
+            }
+            .days-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER METADATA -->
+        <header>
+            <div class="logo-area">
+                <h1>⚡ Осознанность & Рефлексия</h1>
+                <p>Ваш трендовый цифровой дневник личного роста</p>
+            </div>
+
+            <div class="meta-controls">
+                <div class="meta-group">
+                    <label>📅 Месяц / Период</label>
+                    <input type="text" id="meta-month" value="Сентябрь 2026" oninput="saveData()">
+                </div>
+                <div class="meta-group">
+                    <label>🛠 Дата патча / Ревизия</label>
+                    <input type="text" id="meta-patch" value="v2.4 (02.08.2026)" oninput="saveData()">
+                </div>
+            </div>
+        </header>
+
+        <!-- TOOLBAR & ACTIONS -->
+        <div class="toolbar">
+            <div class="view-switch">
+                <button class="view-btn active" id="btn-grid" onclick="switchView('grid')">📱 Карточки</button>
+                <button class="view-btn" id="btn-table" onclick="switchView('table')">📊 Таблица</button>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action" onclick="exportData()">💾 Скачать бэкап</button>
+                <button class="btn-action" onclick="resetData()" style="color: #f87171;">🗑 Сброс</button>
+            </div>
+        </div>
+
+        <!-- CARDS VIEW -->
+        <div id="grid-view" class="days-grid"></div>
+
+        <!-- TABLE VIEW -->
+        <div id="table-view" class="table-view-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px; text-align: center;">День</th>
+                        <th style="width: 90px;">⚡ Энергия</th>
+                        <th style="width: 20%;">🚫 Отказ дня</th>
+                        <th style="width: 25%;">💡 Ошибка → Урок</th>
+                        <th style="width: 22%;">🔥 Моё слово</th>
+                        <th style="width: 23%;">🎭 Где был не собой?</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const TOTAL_DAYS = 30;
+        let journalData = {};
+
+        function initData() {
+            const saved = localStorage.getItem('reflection_journal_db');
+            if (saved) {
+                try {
+                    journalData = JSON.parse(saved);
+                } catch(e) { journalData = {}; }
+            }
+            
+            if (journalData.metaMonth) document.getElementById('meta-month').value = journalData.metaMonth;
+            if (journalData.metaPatch) document.getElementById('meta-patch').value = journalData.metaPatch;
+
+            renderGrid();
+            renderTable();
+        }
+
+        function saveData() {
+            journalData.metaMonth = document.getElementById('meta-month').value;
+            journalData.metaPatch = document.getElementById('meta-patch').value;
+
+            for (let i = 1; i <= TOTAL_DAYS; i++) {
+                const dayKey = `day_${i}`;
+                if (!journalData[dayKey]) journalData[dayKey] = {};
+
+                const energyCard = document.getElementById(`energy-card-${i}`);
+                if (energyCard) {
+                    journalData[dayKey].energy = energyCard.value;
+                    journalData[dayKey].refusal = document.getElementById(`refusal-card-${i}`).value;
+                    journalData[dayKey].lesson = document.getElementById(`lesson-card-${i}`).value;
+                    journalData[dayKey].word = document.getElementById(`word-card-${i}`).value;
+                    journalData[dayKey].self = document.getElementById(`self-card-${i}`).value;
+                }
+            }
+            localStorage.setItem('reflection_journal_db', JSON.stringify(journalData));
+            syncViews();
+        }
+
+        function syncViews() {
+            for (let i = 1; i <= TOTAL_DAYS; i++) {
+                const dayKey = `day_${i}`;
+                const data = journalData[dayKey] || {};
+
+                const energyTab = document.getElementById(`energy-tab-${i}`);
+                if (energyTab && document.activeElement !== energyTab) energyTab.value = data.energy || '';
+                
+                const refusalTab = document.getElementById(`refusal-tab-${i}`);
+                if (refusalTab && document.activeElement !== refusalTab) refusalTab.value = data.refusal || '';
+
+                const lessonTab = document.getElementById(`lesson-tab-${i}`);
+                if (lessonTab && document.activeElement !== lessonTab) lessonTab.value = data.lesson || '';
+
+                const wordTab = document.getElementById(`word-tab-${i}`);
+                if (wordTab && document.activeElement !== wordTab) wordTab.value = data.word || '';
+
+                const selfTab = document.getElementById(`self-tab-${i}`);
+                if (selfTab && document.activeElement !== selfTab) selfTab.value = data.self || '';
+            }
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid-view');
+            grid.innerHTML = '';
+
+            for (let i = 1; i <= TOTAL_DAYS; i++) {
+                const dayKey = `day_${i}`;
+                const data = journalData[dayKey] || {};
+
+                const card = document.createElement('div');
+                card.className = 'day-card';
+                card.innerHTML = `
+                    <div class="day-card-header">
+                        <span class="day-badge">День ${i}</span>
+                        <div class="energy-selector">
+                            <label>⚡ Энергия</label>
+                            <input type="number" min="1" max="10" id="energy-card-${i}" class="energy-input" value="${data.energy || ''}" placeholder="1-10" oninput="saveData()">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>🚫 Отказ дня (чему сказал «нет»)</label>
+                        <textarea id="refusal-card-${i}" placeholder="Например: отложил телефон..." oninput="saveData()">${data.refusal || ''}</textarea>
+                    </div>
+
+                    <div class="field-group">
+                        <label>💡 Ошибка → Урок (что понял)</label>
+                        <textarea id="lesson-card-${i}" placeholder="Понял, что нужно..." oninput="saveData()">${data.lesson || ''}</textarea>
+                    </div>
+
+                    <div class="field-group">
+                        <label>🔥 Моё слово (фраза-влияние)</label>
+                        <textarea id="word-card-${i}" placeholder="Фокус и дисциплина..." oninput="saveData()">${data.word || ''}</textarea>
+                    </div>
+
+                    <div class="field-group">
+                        <label>🎭 Где был не собой?</label>
+                        <textarea id="self-card-${i}" placeholder="Смог ли сохранить осознанность..." oninput="saveData()">${data.self || ''}</textarea>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            for (let i = 1; i <= TOTAL_DAYS; i++) {
+                const dayKey = `day_${i}`;
+                const data = journalData[dayKey] || {};
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="day-num">${i}</td>
+                    <td>
+                        <input type="number" min="1" max="10" id="energy-tab-${i}" class="energy-input" style="width:100%" value="${data.energy || ''}" oninput="syncFromTable(${i})">
+                    </td>
+                    <td><textarea id="refusal-tab-${i}" oninput="syncFromTable(${i})">${data.refusal || ''}</textarea></td>
+                    <td><textarea id="lesson-tab-${i}" oninput="syncFromTable(${i})">${data.lesson || ''}</textarea></td>
+                    <td><textarea id="word-tab-${i}" oninput="syncFromTable(${i})">${data.word || ''}</textarea></td>
+                    <td><textarea id="self-tab-${i}" oninput="syncFromTable(${i})">${data.self || ''}</textarea></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        function syncFromTable(dayIndex) {
+            const dayKey = `day_${dayIndex}`;
+            if (!journalData[dayKey]) journalData[dayKey] = {};
+
+            journalData[dayKey].energy = document.getElementById(`energy-tab-${dayIndex}`).value;
+            journalData[dayKey].refusal = document.getElementById(`refusal-tab-${dayIndex}`).value;
+            journalData[dayKey].lesson = document.getElementById(`lesson-tab-${dayIndex}`).value;
+            journalData[dayKey].word = document.getElementById(`word-tab-${dayIndex}`).value;
+            journalData[dayKey].self = document.getElementById(`self-tab-${dayIndex}`).value;
+
+            const energyCard = document.getElementById(`energy-card-${dayIndex}`);
+            if (energyCard) {
+                energyCard.value = journalData[dayKey].energy;
+                document.getElementById(`refusal-card-${dayIndex}`).value = journalData[dayKey].refusal;
+                document.getElementById(`lesson-card-${dayIndex}`).value = journalData[dayKey].lesson;
+                document.getElementById(`word-card-${dayIndex}`).value = journalData[dayKey].word;
+                document.getElementById(`self-card-${dayIndex}`).value = journalData[dayKey].self;
+            }
+
+            localStorage.setItem('reflection_journal_db', JSON.stringify(journalData));
+        }
+
+        function switchView(view) {
+            const grid = document.getElementById('grid-view');
+            const table = document.getElementById('table-view');
+            const btnGrid = document.getElementById('btn-grid');
+            const btnTable = document.getElementById('btn-table');
+
+            if (view === 'grid') {
+                grid.style.display = 'grid';
+                table.style.display = 'none';
+                btnGrid.classList.add('active');
+                btnTable.classList.remove('active');
+            } else {
+                grid.style.display = 'none';
+                table.style.display = 'block';
+                btnTable.classList.add('active');
+                btnGrid.classList.remove('active');
+            }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(journalData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `journal_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function resetData() {
+            if (confirm("Вы уверены, что хотите очистить весь дневник? Все записи будут удалены.")) {
+                localStorage.removeItem('reflection_journal_db');
+                journalData = {};
+                initData();
+            }
+        }
+
+        window.onload = initData;
+    </script>
+</body>
+</html>
+ этого кода создай э-э приложение, которое можно прямо здесь открыть.
