@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Life Dashboard v6.1</title>
+    <title>⚡ Life Dashboard v6.1 — Stories</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ===================================================================
-           ROOT VARIABLES (все темы — как в прошлой версии)
+           ROOT VARIABLES
            =================================================================== */
         :root[data-theme="cyber"] {
             --bg: #090d16;
@@ -771,12 +771,76 @@
             display: block;
         }
 
-        .fields-wrapper {
-            display: block;
-            transition: all 0.3s ease;
+        /* Свёрнутая вкладка (после сохранения) */
+        .tab-content .tab-collapsed {
+            display: none;
+            background: var(--input-bg);
+            border-radius: 10px;
+            padding: 14px 16px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 12px;
         }
-        .fields-wrapper.hidden {
-            display: none !important;
+        .tab-content .tab-collapsed.visible {
+            display: block;
+        }
+        .tab-content .tab-collapsed .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .tab-content .tab-collapsed .header .title {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--success);
+        }
+        .tab-content .tab-collapsed .header .badge {
+            font-size: 10px;
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+        .tab-content .tab-collapsed .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .tab-content .tab-collapsed .data-grid .item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tab-content .tab-collapsed .data-grid .item .val {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .tab-content .tab-collapsed .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .tab-content .tab-collapsed .actions button {
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-content .tab-collapsed .actions button:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .tab-content .tab-fields {
+            display: block;
+        }
+        .tab-content .tab-fields.hidden {
+            display: none;
         }
 
         .section-title {
@@ -922,78 +986,94 @@
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         @media (max-width: 500px) { .grid-2 { grid-template-columns: 1fr; } }
 
-        /* ---------- БАННЕР: ДЕНЬ ЗАПОЛНЕН ---------- */
-        .day-locked-banner {
-            background: linear-gradient(135deg, var(--success), #059669);
-            border-radius: 12px;
-            padding: 14px 16px;
-            color: #fff;
-            display: none;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-        .day-locked-banner.visible { display: flex; }
-        .day-locked-banner .info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            font-size: 12px;
-        }
-        .day-locked-banner .info .date { font-weight: 800; font-size: 14px; }
-        .day-locked-banner .info .stats {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 11px;
-            opacity: 0.9;
-        }
-        .day-locked-banner .actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .day-locked-banner .actions button {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(4px);
-        }
-        .day-locked-banner .actions button:hover {
-            background: rgba(255,255,255,0.35);
-            transform: scale(1.03);
-        }
-
-        .btn-save {
+        .btn-save-tab {
             width: 100%;
-            background: linear-gradient(135deg, var(--success), #059669);
+            background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
             border: none;
             color: #fff;
-            font-weight: 800;
+            font-weight: 700;
             font-size: 13px;
             padding: 10px;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
-            margin-top: 14px;
-            transition: all 0.3s;
-            position: relative;
-        }
-        .btn-save:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(16,185,129,0.4); }
-        .btn-save:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-        .btn-save.edit-mode {
-            background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
             box-shadow: 0 4px 15px var(--accent-glow);
+            margin-top: 10px;
+            transition: all 0.3s;
         }
-        .btn-save.append-mode {
-            background: linear-gradient(135deg, var(--warning), #d97706);
-            box-shadow: 0 4px 15px rgba(245,158,11,0.3);
+        .btn-save-tab:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .btn-save-tab:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===================================================================
+           DAY SUMMARY (вкладка Основное после завершения дня)
+           =================================================================== */
+        .day-summary {
+            display: none;
+        }
+        .day-summary.visible {
+            display: block;
+        }
+        .day-summary .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .day-summary .summary-card {
+            background: var(--input-bg);
+            border-radius: 10px;
+            padding: 12px 14px;
+            border: 1px solid var(--card-border);
+        }
+        .day-summary .summary-card .label {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .day-summary .summary-card .value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+        .day-summary .summary-card .value .highlight {
+            color: var(--accent-primary);
+        }
+        .day-summary .summary-section {
+            background: var(--input-bg);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border: 1px solid var(--card-border);
+        }
+        .day-summary .summary-section .title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 4px;
+        }
+        .day-summary .summary-section .row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .day-summary .summary-section .row .item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .day-summary .summary-section .row .item .val {
+            color: var(--text-main);
+            font-weight: 600;
         }
 
         /* ===================================================================
@@ -1060,7 +1140,7 @@
         .chart-box canvas { width: 100% !important; max-height: 120px !important; }
 
         /* ===================================================================
-           SUBTABS (для архива)
+           SUBTABS
            =================================================================== */
         .subtabs-nav {
             display: flex;
@@ -1318,51 +1398,54 @@
         }
 
         /* ===================================================================
-           SCREENSHOT CONTAINER
+           STORIES SCREENSHOT
            =================================================================== */
-        #screenshot-container {
+        #stories-container {
             position: fixed;
             left: -9999px;
             top: 0;
-            width: 600px;
+            width: 400px;
+            height: 700px;
             background: #0a0a0f;
-            padding: 30px;
+            padding: 28px 24px;
             z-index: 9999;
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: #f8fafc;
-            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        #screenshot-container .screenshot-header {
+        #stories-container .stories-header {
             border-bottom: 2px solid var(--accent-primary);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        #screenshot-container .screenshot-header .logo {
-            font-size: 18px;
+        #stories-container .stories-header .logo {
+            font-size: 16px;
             font-weight: 800;
             color: var(--accent-primary);
         }
-        #screenshot-container .screenshot-header .date {
-            font-size: 12px;
+        #stories-container .stories-header .date {
+            font-size: 10px;
             color: #94a3b8;
         }
-        #screenshot-container .screenshot-profile {
+        #stories-container .stories-profile {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             background: #161e2e;
-            border-radius: 12px;
-            padding: 14px 18px;
-            margin-bottom: 16px;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
             border: 1px solid rgba(255,255,255,0.06);
         }
-        #screenshot-container .screenshot-profile .avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
+        #stories-container .stories-profile .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             border: 2px solid var(--accent-primary);
             overflow: hidden;
             flex-shrink: 0;
@@ -1370,77 +1453,64 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 18px;
             color: #94a3b8;
         }
-        #screenshot-container .screenshot-profile .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        #screenshot-container .screenshot-profile .info { flex: 1; }
-        #screenshot-container .screenshot-profile .info .name { font-size: 16px; font-weight: 700; }
-        #screenshot-container .screenshot-profile .info .meta { font-size: 12px; color: #94a3b8; }
-        #screenshot-container .screenshot-profile .info .streak { font-size: 13px; font-weight: 800; color: #f59e0b; }
-        #screenshot-container .screenshot-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+        #stories-container .stories-profile .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        #stories-container .stories-profile .info { flex: 1; }
+        #stories-container .stories-profile .info .name { font-size: 13px; font-weight: 700; }
+        #stories-container .stories-profile .info .meta { font-size: 10px; color: #94a3b8; }
+        #stories-container .stories-profile .info .streak { font-size: 11px; font-weight: 800; color: #f59e0b; }
+
+        #stories-container .stories-body {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
-        #screenshot-container .screenshot-stats .stat {
+        #stories-container .stories-body .block {
             background: #161e2e;
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.04);
         }
-        #screenshot-container .screenshot-stats .stat .label {
+        #stories-container .stories-body .block .label {
             font-size: 9px;
-            color: #94a3b8;
+            font-weight: 700;
+            color: var(--accent-primary);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
         }
-        #screenshot-container .screenshot-stats .stat .value {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--accent-primary);
-        }
-        #screenshot-container .screenshot-chart {
-            background: #161e2e;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        #screenshot-container .screenshot-chart .title {
+        #stories-container .stories-body .block .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
             font-size: 11px;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: 8px;
+            color: #94a3b8;
         }
-        #screenshot-container .screenshot-chart canvas { width: 100% !important; height: 120px !important; }
-        #screenshot-container .screenshot-victories {
-            background: #161e2e;
-            border-radius: 10px;
-            padding: 12px 16px;
-            border: 1px solid rgba(255,255,255,0.06);
+        #stories-container .stories-body .block .row .item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
         }
-        #screenshot-container .screenshot-victories .title {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: 6px;
+        #stories-container .stories-body .block .row .item .val {
+            color: #f8fafc;
+            font-weight: 600;
         }
-        #screenshot-container .screenshot-victories .victory-item {
-            font-size: 12px;
-            padding: 3px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            color: #10b981;
-        }
-        #screenshot-container .screenshot-victories .victory-item:last-child { border-bottom: none; }
-        #screenshot-container .screenshot-footer {
-            margin-top: 16px;
-            padding-top: 10px;
+
+        #stories-container .stories-footer {
             border-top: 1px solid #2a2a2a;
+            padding-top: 8px;
+            margin-top: 6px;
             text-align: center;
-            font-size: 9px;
+            font-size: 8px;
             color: #4a4a5a;
+        }
+        #stories-container .stories-body .summary-block {
+            background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(16,185,129,0.1));
+            border: 1px solid rgba(99,102,241,0.15);
         }
 
         /* ===================================================================
@@ -1470,6 +1540,9 @@
             .today-tabs .tab-btn {
                 font-size: 10px;
                 padding: 4px 10px;
+            }
+            .day-summary .summary-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1554,7 +1627,7 @@
 
         <div class="bottom">
             <div style="padding: 0 12px; font-size: 8px; color: var(--text-muted); text-align: center; opacity: 0.5;">
-                v6.1
+                v6.1 — Stories
             </div>
         </div>
     </nav>
@@ -1564,9 +1637,9 @@
         <div class="container">
 
             <!-- ============================================================
-            SCREENSHOT CONTAINER (hidden)
+            STORIES CONTAINER (hidden)
             ============================================================ -->
-            <div id="screenshot-container"></div>
+            <div id="stories-container"></div>
 
             <!-- HEADER -->
             <header>
@@ -1597,7 +1670,7 @@
                         <div class="streak-badge">🔥 <span id="streak-count">0</span></div>
                     </div>
                     <div class="right-group">
-                        <button class="btn-action screenshot" onclick="ScreenshotExport.export()">📸</button>
+                        <button class="btn-action screenshot" onclick="StoriesExport.export()">📸</button>
                         <button class="btn-action" onclick="BackupManager.export()">💾</button>
                         <button class="btn-action danger" onclick="BackupManager.reset()">🗑</button>
                     </div>
@@ -1666,80 +1739,157 @@
                         </div>
 
                         <!-- ================================================
-                        ТАБ 1: ОСНОВНОЕ (старые поля)
+                        ТАБ 1: ОСНОВНОЕ (становится итоговой сводкой)
                         ================================================ -->
                         <div class="tab-content active" id="tab-main">
-                            <div class="section-title">⚡ Состояние и Дисциплина</div>
-                            <div class="grid-2">
-                                <div class="field-group">
-                                    <div class="label-row">
-                                        <label>⚡ Энергия: <span id="energy-val" style="color:var(--accent-primary); font-weight:800;">5</span>/10</label>
+                            <!-- СВОДКА ДНЯ (показывается когда день завершён) -->
+                            <div class="day-summary" id="day-summary">
+                                <div class="summary-grid">
+                                    <div class="summary-card">
+                                        <div class="label">⚡ Итоговая энергия</div>
+                                        <div class="value"><span class="highlight" id="summary-energy">0</span>/10</div>
                                     </div>
-                                    <input type="range" min="1" max="10" value="5" id="today-energy" class="energy-range" oninput="document.getElementById('energy-val').innerText = this.value">
+                                    <div class="summary-card">
+                                        <div class="label">📈 Прогресс по целям</div>
+                                        <div class="value"><span class="highlight" id="summary-progress">0</span>%</div>
+                                    </div>
                                 </div>
-                                <div class="field-group">
-                                    <label>🏃 Спорт / Активность</label>
-                                    <select id="today-sport">
-                                        <option value="Нет">❌ Без активности</option>
-                                        <option value="Легкая">🚶 Прогулка / Зарядка</option>
-                                        <option value="Тренировка">🏋️ Полноценная тренировка</option>
-                                        <option value="Кардио">🚴 Кардио / Бег / Вел</option>
-                                    </select>
+
+                                <div class="summary-section">
+                                    <div class="title">🧘‍♂️ Тело</div>
+                                    <div class="row" id="summary-body">
+                                        <div class="item">💧 Вода: <span class="val" id="s-body-water">—</span></div>
+                                        <div class="item">😴 Сон: <span class="val" id="s-body-sleep">—</span> ч</div>
+                                        <div class="item">💪 Энергия: <span class="val" id="s-body-energy">—</span>/10</div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-section">
+                                    <div class="title">🧠 Мозг</div>
+                                    <div class="row" id="summary-mind">
+                                        <div class="item">😊 Настроение: <span class="val" id="s-mind-mood">—</span></div>
+                                        <div class="item">🧠 Стресс: <span class="val" id="s-mind-stress">—</span>/10</div>
+                                        <div class="item">🧘 Медитация: <span class="val" id="s-mind-meditation">—</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-section">
+                                    <div class="title">💼 Дела</div>
+                                    <div class="row" id="summary-work">
+                                        <div class="item">🎯 Цель: <span class="val" id="s-work-goal">—</span></div>
+                                        <div class="item">🏆 Результат: <span class="val" id="s-work-result">—</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-section">
+                                    <div class="title">❤️ Душа</div>
+                                    <div class="row" id="summary-soul">
+                                        <div class="item">👥 Общение: <span class="val" id="s-soul-communication">—</span></div>
+                                        <div class="item">🎨 Хобби: <span class="val" id="s-soul-hobby">—</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-section" style="border-color: var(--accent-primary);">
+                                    <div class="title">🔥 Слово дня</div>
+                                    <div class="row">
+                                        <div class="item" id="summary-word" style="font-size:14px; font-weight:700; color:var(--accent-primary);">—</div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="section-title">🎯 Главный Фокус Дня</div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🎯 Главная цель / Задача дня</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('today-goal', this)">🎤</button>
+                            <!-- ПОЛЯ (скрываются после сохранения вкладки) -->
+                            <div class="tab-fields" id="tab-main-fields">
+                                <div class="section-title">⚡ Состояние и Дисциплина</div>
+                                <div class="grid-2">
+                                    <div class="field-group">
+                                        <div class="label-row">
+                                            <label>⚡ Энергия: <span id="energy-val" style="color:var(--accent-primary); font-weight:800;">5</span>/10</label>
+                                        </div>
+                                        <input type="range" min="1" max="10" value="5" id="today-energy" class="energy-range" oninput="document.getElementById('energy-val').innerText = this.value">
+                                    </div>
+                                    <div class="field-group">
+                                        <label>🏃 Спорт / Активность</label>
+                                        <select id="today-sport">
+                                            <option value="Нет">❌ Без активности</option>
+                                            <option value="Легкая">🚶 Прогулка / Зарядка</option>
+                                            <option value="Тренировка">🏋️ Полноценная тренировка</option>
+                                            <option value="Кардио">🚴 Кардио / Бег / Вел</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <textarea id="today-goal" placeholder="Какую главную цель закрываем сегодня?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>📌 Второстепенные задачи</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('today-subgoals', this)">🎤</button>
+
+                                <div class="section-title">🎯 Главный Фокус Дня</div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🎯 Главная цель / Задача дня</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('today-goal', this)">🎤</button>
+                                    </div>
+                                    <textarea id="today-goal" placeholder="Какую главную цель закрываем сегодня?"></textarea>
                                 </div>
-                                <input type="text" id="today-subgoals" placeholder="Например: отправить письмо, купить продукты...">
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>📌 Второстепенные задачи</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('today-subgoals', this)">🎤</button>
+                                    </div>
+                                    <input type="text" id="today-subgoals" placeholder="Например: отправить письмо, купить продукты...">
+                                </div>
+
+                                <div class="section-title">🧠 Итоги & Осознанность</div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🏆 Главная победа дня</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('today-victory', this)">🎤</button>
+                                    </div>
+                                    <textarea id="today-victory" placeholder="Что сегодня получилось лучше всего?"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>❤️ За что благодарен сегодня</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('today-thanks', this)">🎤</button>
+                                    </div>
+                                    <textarea id="today-thanks" placeholder="Кому или чему благодарен..."></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🚫 Отказ дня</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('today-refusal', this)">🎤</button>
+                                    </div>
+                                    <textarea id="today-refusal" placeholder="Чему или кому сказал «нет»..."></textarea>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="field-group">
+                                        <div class="label-row">
+                                            <label>💡 Главный урок</label>
+                                            <button class="btn-mic" onclick="VoiceInput.start('today-lesson', this)">🎤</button>
+                                        </div>
+                                        <textarea id="today-lesson" placeholder="Что понял за день..."></textarea>
+                                    </div>
+                                    <div class="field-group">
+                                        <div class="label-row">
+                                            <label>🔥 Слово дня</label>
+                                            <button class="btn-mic" onclick="VoiceInput.start('today-word', this)">🎤</button>
+                                        </div>
+                                        <textarea id="today-word" placeholder="Девиз дня..."></textarea>
+                                    </div>
+                                </div>
+
+                                <button class="btn-save-tab" id="save-main" onclick="TabManager.saveTab('main')">💾 Сохранить вкладку</button>
                             </div>
 
-                            <div class="section-title">🧠 Итоги & Осознанность</div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🏆 Главная победа дня</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('today-victory', this)">🎤</button>
+                            <!-- Свёрнутая вкладка (после сохранения) -->
+                            <div class="tab-collapsed" id="collapsed-main">
+                                <div class="header">
+                                    <span class="title">✅ Основное заполнено</span>
+                                    <span class="badge">Сохранено</span>
                                 </div>
-                                <textarea id="today-victory" placeholder="Что сегодня получилось лучше всего?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>❤️ За что благодарен сегодня</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('today-thanks', this)">🎤</button>
+                                <div class="data-grid">
+                                    <div class="item">⚡ Энергия: <span class="val" id="c-main-energy">—</span></div>
+                                    <div class="item">🎯 Цель: <span class="val" id="c-main-goal">—</span></div>
+                                    <div class="item">🏆 Победа: <span class="val" id="c-main-victory">—</span></div>
                                 </div>
-                                <textarea id="today-thanks" placeholder="Кому или чему благодарен..."></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🚫 Отказ дня</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('today-refusal', this)">🎤</button>
-                                </div>
-                                <textarea id="today-refusal" placeholder="Чему или кому сказал «нет»..."></textarea>
-                            </div>
-                            <div class="grid-2">
-                                <div class="field-group">
-                                    <div class="label-row">
-                                        <label>💡 Главный урок</label>
-                                        <button class="btn-mic" onclick="VoiceInput.start('today-lesson', this)">🎤</button>
-                                    </div>
-                                    <textarea id="today-lesson" placeholder="Что понял за день..."></textarea>
-                                </div>
-                                <div class="field-group">
-                                    <div class="label-row">
-                                        <label>🔥 Слово дня</label>
-                                        <button class="btn-mic" onclick="VoiceInput.start('today-word', this)">🎤</button>
-                                    </div>
-                                    <textarea id="today-word" placeholder="Девиз дня..."></textarea>
+                                <div class="actions">
+                                    <button onclick="TabManager.editTab('main')">✏️ Редактировать</button>
+                                    <button onclick="TabManager.appendTab('main')">➕ Дополнить</button>
                                 </div>
                             </div>
                         </div>
@@ -1748,38 +1898,56 @@
                         ТАБ 2: ТЕЛО
                         ================================================ -->
                         <div class="tab-content" id="tab-body">
-                            <div class="section-title">🧘‍♂️ Физическое состояние</div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>💧 Вода: <span id="body-water-val" style="color:var(--accent-primary); font-weight:800;">5</span> стаканов</label>
+                            <div class="tab-fields" id="tab-body-fields">
+                                <div class="section-title">🧘‍♂️ Физическое состояние</div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>💧 Вода: <span id="body-water-val" style="color:var(--accent-primary); font-weight:800;">5</span> стаканов</label>
+                                    </div>
+                                    <input type="range" min="0" max="10" value="5" id="body-water" class="energy-range" oninput="document.getElementById('body-water-val').innerText = this.value">
                                 </div>
-                                <input type="range" min="0" max="10" value="5" id="body-water" class="energy-range" oninput="document.getElementById('body-water-val').innerText = this.value">
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>😴 Сон: <span id="body-sleep-val" style="color:var(--accent-primary); font-weight:800;">7</span> часов</label>
+                                    </div>
+                                    <input type="range" min="0" max="12" step="0.5" value="7" id="body-sleep" class="energy-range" oninput="document.getElementById('body-sleep-val').innerText = this.value">
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🍽️ Питание</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('body-food', this)">🎤</button>
+                                    </div>
+                                    <textarea id="body-food" placeholder="Что ел сегодня?"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>💪 Энергия тела: <span id="body-energy-val" style="color:var(--accent-primary); font-weight:800;">7</span>/10</label>
+                                    </div>
+                                    <input type="range" min="1" max="10" value="7" id="body-energy" class="energy-range" oninput="document.getElementById('body-energy-val').innerText = this.value">
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>📝 Заметка</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('body-note', this)">🎤</button>
+                                    </div>
+                                    <textarea id="body-note" placeholder="Заметка по физическому состоянию..."></textarea>
+                                </div>
+                                <button class="btn-save-tab" id="save-body" onclick="TabManager.saveTab('body')">💾 Сохранить вкладку</button>
                             </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>😴 Сон: <span id="body-sleep-val" style="color:var(--accent-primary); font-weight:800;">7</span> часов</label>
+                            <div class="tab-collapsed" id="collapsed-body">
+                                <div class="header">
+                                    <span class="title">✅ Тело заполнено</span>
+                                    <span class="badge">Сохранено</span>
                                 </div>
-                                <input type="range" min="0" max="12" step="0.5" value="7" id="body-sleep" class="energy-range" oninput="document.getElementById('body-sleep-val').innerText = this.value">
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🍽️ Питание</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('body-food', this)">🎤</button>
+                                <div class="data-grid">
+                                    <div class="item">💧 Вода: <span class="val" id="c-body-water">—</span></div>
+                                    <div class="item">😴 Сон: <span class="val" id="c-body-sleep">—</span> ч</div>
+                                    <div class="item">💪 Энергия: <span class="val" id="c-body-energy">—</span>/10</div>
                                 </div>
-                                <textarea id="body-food" placeholder="Что ел сегодня?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>💪 Энергия тела: <span id="body-energy-val" style="color:var(--accent-primary); font-weight:800;">7</span>/10</label>
+                                <div class="actions">
+                                    <button onclick="TabManager.editTab('body')">✏️ Редактировать</button>
+                                    <button onclick="TabManager.appendTab('body')">➕ Дополнить</button>
                                 </div>
-                                <input type="range" min="1" max="10" value="7" id="body-energy" class="energy-range" oninput="document.getElementById('body-energy-val').innerText = this.value">
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>📝 Заметка</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('body-note', this)">🎤</button>
-                                </div>
-                                <textarea id="body-note" placeholder="Заметка по физическому состоянию..."></textarea>
                             </div>
                         </div>
 
@@ -1787,48 +1955,66 @@
                         ТАБ 3: МОЗГ
                         ================================================ -->
                         <div class="tab-content" id="tab-mind">
-                            <div class="section-title">🧠 Ментальное состояние</div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>😊 Настроение</label>
+                            <div class="tab-fields" id="tab-mind-fields">
+                                <div class="section-title">🧠 Ментальное состояние</div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>😊 Настроение</label>
+                                    </div>
+                                    <div class="mood-selector" id="mood-selector">
+                                        <button class="mood-btn active" data-mood="😊" onclick="selectMood('😊', this)">😊</button>
+                                        <button class="mood-btn" data-mood="😐" onclick="selectMood('😐', this)">😐</button>
+                                        <button class="mood-btn" data-mood="😢" onclick="selectMood('😢', this)">😢</button>
+                                        <button class="mood-btn" data-mood="😡" onclick="selectMood('😡', this)">😡</button>
+                                    </div>
+                                    <input type="hidden" id="mind-mood" value="😊">
                                 </div>
-                                <div class="mood-selector" id="mood-selector">
-                                    <button class="mood-btn active" data-mood="😊" onclick="selectMood('😊', this)">😊</button>
-                                    <button class="mood-btn" data-mood="😐" onclick="selectMood('😐', this)">😐</button>
-                                    <button class="mood-btn" data-mood="😢" onclick="selectMood('😢', this)">😢</button>
-                                    <button class="mood-btn" data-mood="😡" onclick="selectMood('😡', this)">😡</button>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🧠 Стресс: <span id="mind-stress-val" style="color:var(--accent-primary); font-weight:800;">3</span>/10</label>
+                                    </div>
+                                    <input type="range" min="1" max="10" value="3" id="mind-stress" class="energy-range" oninput="document.getElementById('mind-stress-val').innerText = this.value">
                                 </div>
-                                <input type="hidden" id="mind-mood" value="😊">
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🧘 Медитация / Осознанность</label>
+                                    </div>
+                                    <div class="toggle-group" id="meditation-toggle">
+                                        <button class="toggle-btn active" data-value="yes" onclick="selectToggle('meditation', 'yes', this)">✅ Да</button>
+                                        <button class="toggle-btn" data-value="no" onclick="selectToggle('meditation', 'no', this)">❌ Нет</button>
+                                    </div>
+                                    <input type="hidden" id="mind-meditation" value="yes">
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🙏 Благодарность</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('mind-gratitude', this)">🎤</button>
+                                    </div>
+                                    <textarea id="mind-gratitude" placeholder="За что ты благодарен сегодня?"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>📝 Заметка</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('mind-note', this)">🎤</button>
+                                    </div>
+                                    <textarea id="mind-note" placeholder="Заметка по ментальному состоянию..."></textarea>
+                                </div>
+                                <button class="btn-save-tab" id="save-mind" onclick="TabManager.saveTab('mind')">💾 Сохранить вкладку</button>
                             </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🧠 Стресс: <span id="mind-stress-val" style="color:var(--accent-primary); font-weight:800;">3</span>/10</label>
+                            <div class="tab-collapsed" id="collapsed-mind">
+                                <div class="header">
+                                    <span class="title">✅ Мозг заполнен</span>
+                                    <span class="badge">Сохранено</span>
                                 </div>
-                                <input type="range" min="1" max="10" value="3" id="mind-stress" class="energy-range" oninput="document.getElementById('mind-stress-val').innerText = this.value">
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🧘 Медитация / Осознанность</label>
+                                <div class="data-grid">
+                                    <div class="item">😊 Настроение: <span class="val" id="c-mind-mood">—</span></div>
+                                    <div class="item">🧠 Стресс: <span class="val" id="c-mind-stress">—</span>/10</div>
+                                    <div class="item">🧘 Медитация: <span class="val" id="c-mind-meditation">—</span></div>
                                 </div>
-                                <div class="toggle-group" id="meditation-toggle">
-                                    <button class="toggle-btn active" data-value="yes" onclick="selectToggle('meditation', 'yes', this)">✅ Да</button>
-                                    <button class="toggle-btn" data-value="no" onclick="selectToggle('meditation', 'no', this)">❌ Нет</button>
+                                <div class="actions">
+                                    <button onclick="TabManager.editTab('mind')">✏️ Редактировать</button>
+                                    <button onclick="TabManager.appendTab('mind')">➕ Дополнить</button>
                                 </div>
-                                <input type="hidden" id="mind-meditation" value="yes">
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🙏 Благодарность</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('mind-gratitude', this)">🎤</button>
-                                </div>
-                                <textarea id="mind-gratitude" placeholder="За что ты благодарен сегодня?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>📝 Заметка</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('mind-note', this)">🎤</button>
-                                </div>
-                                <textarea id="mind-note" placeholder="Заметка по ментальному состоянию..."></textarea>
                             </div>
                         </div>
 
@@ -1836,40 +2022,58 @@
                         ТАБ 4: ДЕЛА
                         ================================================ -->
                         <div class="tab-content" id="tab-work">
-                            <div class="section-title">💼 Бизнес / Работа</div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🎯 Главная цель дня</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('work-goal', this)">🎤</button>
+                            <div class="tab-fields" id="tab-work-fields">
+                                <div class="section-title">💼 Бизнес / Работа</div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🎯 Главная цель дня</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('work-goal', this)">🎤</button>
+                                    </div>
+                                    <textarea id="work-goal" placeholder="Главная задача на сегодня..."></textarea>
                                 </div>
-                                <textarea id="work-goal" placeholder="Главная задача на сегодня..."></textarea>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>✅ Что сделано</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('work-done', this)">🎤</button>
+                                    </div>
+                                    <textarea id="work-done" placeholder="Что удалось сделать..."></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🏆 Ключевой результат</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('work-result', this)">🎤</button>
+                                    </div>
+                                    <textarea id="work-result" placeholder="Что получилось лучше всего..."></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>📊 Прогресс за день: <span id="work-progress-val" style="color:var(--accent-primary); font-weight:800;">7</span>/10</label>
+                                    </div>
+                                    <input type="range" min="1" max="10" value="7" id="work-progress" class="energy-range" oninput="document.getElementById('work-progress-val').innerText = this.value">
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>📝 Заметка</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('work-note', this)">🎤</button>
+                                    </div>
+                                    <textarea id="work-note" placeholder="Заметка по делам..."></textarea>
+                                </div>
+                                <button class="btn-save-tab" id="save-work" onclick="TabManager.saveTab('work')">💾 Сохранить вкладку</button>
                             </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>✅ Что сделано</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('work-done', this)">🎤</button>
+                            <div class="tab-collapsed" id="collapsed-work">
+                                <div class="header">
+                                    <span class="title">✅ Дела заполнены</span>
+                                    <span class="badge">Сохранено</span>
                                 </div>
-                                <textarea id="work-done" placeholder="Что удалось сделать..."></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🏆 Ключевой результат</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('work-result', this)">🎤</button>
+                                <div class="data-grid">
+                                    <div class="item">🎯 Цель: <span class="val" id="c-work-goal">—</span></div>
+                                    <div class="item">🏆 Результат: <span class="val" id="c-work-result">—</span></div>
+                                    <div class="item">📊 Прогресс: <span class="val" id="c-work-progress">—</span>%</div>
                                 </div>
-                                <textarea id="work-result" placeholder="Что получилось лучше всего..."></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>📊 Прогресс за день: <span id="work-progress-val" style="color:var(--accent-primary); font-weight:800;">7</span>/10</label>
+                                <div class="actions">
+                                    <button onclick="TabManager.editTab('work')">✏️ Редактировать</button>
+                                    <button onclick="TabManager.appendTab('work')">➕ Дополнить</button>
                                 </div>
-                                <input type="range" min="1" max="10" value="7" id="work-progress" class="energy-range" oninput="document.getElementById('work-progress-val').innerText = this.value">
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>📝 Заметка</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('work-note', this)">🎤</button>
-                                </div>
-                                <textarea id="work-note" placeholder="Заметка по делам..."></textarea>
                             </div>
                         </div>
 
@@ -1877,45 +2081,62 @@
                         ТАБ 5: ДУША
                         ================================================ -->
                         <div class="tab-content" id="tab-soul">
-                            <div class="section-title">❤️ Отношения, Хобби, Духовное</div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>👥 Общение</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('soul-communication', this)">🎤</button>
+                            <div class="tab-fields" id="tab-soul-fields">
+                                <div class="section-title">❤️ Отношения, Хобби, Духовное</div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>👥 Общение</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('soul-communication', this)">🎤</button>
+                                    </div>
+                                    <textarea id="soul-communication" placeholder="С кем общался сегодня?"></textarea>
                                 </div>
-                                <textarea id="soul-communication" placeholder="С кем общался сегодня?"></textarea>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🎨 Хобби / Творчество</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('soul-hobby', this)">🎤</button>
+                                    </div>
+                                    <textarea id="soul-hobby" placeholder="Что делал для души?"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>💕 Близкие</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('soul-loved', this)">🎤</button>
+                                    </div>
+                                    <textarea id="soul-loved" placeholder="Как прошёл день с близкими?"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>🌱 Развитие</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('soul-growth', this)">🎤</button>
+                                    </div>
+                                    <textarea id="soul-growth" placeholder="Что нового узнал о себе/мире?"></textarea>
+                                </div>
+                                <div class="field-group">
+                                    <div class="label-row">
+                                        <label>📝 Заметка</label>
+                                        <button class="btn-mic" onclick="VoiceInput.start('soul-note', this)">🎤</button>
+                                    </div>
+                                    <textarea id="soul-note" placeholder="Заметка по душевному состоянию..."></textarea>
+                                </div>
+                                <button class="btn-save-tab" id="save-soul" onclick="TabManager.saveTab('soul')">💾 Сохранить вкладку</button>
                             </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🎨 Хобби / Творчество</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('soul-hobby', this)">🎤</button>
+                            <div class="tab-collapsed" id="collapsed-soul">
+                                <div class="header">
+                                    <span class="title">✅ Душа заполнена</span>
+                                    <span class="badge">Сохранено</span>
                                 </div>
-                                <textarea id="soul-hobby" placeholder="Что делал для души?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>💕 Близкие</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('soul-loved', this)">🎤</button>
+                                <div class="data-grid">
+                                    <div class="item">👥 Общение: <span class="val" id="c-soul-communication">—</span></div>
+                                    <div class="item">🎨 Хобби: <span class="val" id="c-soul-hobby">—</span></div>
+                                    <div class="item">💕 Близкие: <span class="val" id="c-soul-loved">—</span></div>
                                 </div>
-                                <textarea id="soul-loved" placeholder="Как прошёл день с близкими?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>🌱 Развитие</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('soul-growth', this)">🎤</button>
+                                <div class="actions">
+                                    <button onclick="TabManager.editTab('soul')">✏️ Редактировать</button>
+                                    <button onclick="TabManager.appendTab('soul')">➕ Дополнить</button>
                                 </div>
-                                <textarea id="soul-growth" placeholder="Что нового узнал о себе/мире?"></textarea>
-                            </div>
-                            <div class="field-group">
-                                <div class="label-row">
-                                    <label>📝 Заметка</label>
-                                    <button class="btn-mic" onclick="VoiceInput.start('soul-note', this)">🎤</button>
-                                </div>
-                                <textarea id="soul-note" placeholder="Заметка по душевному состоянию..."></textarea>
                             </div>
                         </div>
 
-                        <button class="btn-save" id="save-btn" onclick="DayManager.save()">💾 Сохранить день</button>
                     </div>
                 </div>
             </section>
@@ -2080,9 +2301,9 @@
                 </div>
 
                 <div class="settings-group">
-                    <h3>📸 Скриншот-отчёт</h3>
+                    <h3>📸 Stories</h3>
                     <div class="setting-row" style="border-bottom: none; padding-top: 4px;">
-                        <button class="btn-action screenshot" onclick="ScreenshotExport.export()" style="width:100%; text-align:center; padding:8px; font-size:13px; font-weight:700;">📸 Сделать скриншот карточки достижений</button>
+                        <button class="btn-action screenshot" onclick="StoriesExport.export()" style="width:100%; text-align:center; padding:8px; font-size:13px; font-weight:700;">📸 Сделать Stories-скриншот</button>
                     </div>
                 </div>
             </section>
@@ -2295,13 +2516,15 @@
         };
 
         // ===================================================================
-        //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ТАБОВ
+        //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
         // ===================================================================
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.today-tabs .tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             if (btn) btn.classList.add('active');
+            // Обновляем состояние вкладки при переключении
+            TabManager.updateTabState(tabId);
         }
 
         function selectMood(mood, btn) {
@@ -2318,42 +2541,71 @@
         }
 
         // ===================================================================
-        //  DAY MANAGER (ОБНОВЛЁННАЯ ВЕРСИЯ)
+        //  TAB MANAGER
         // ===================================================================
-        const DayManager = {
-            _mode: 'view',
+        const TabManager = {
+            _savedTabs: {},
 
-            get todayKey() { return new Date().toISOString().slice(0, 10); },
-            get formattedDate() {
-                return new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+            _getRecord() {
+                return Store.findToday() || {};
             },
 
-            // Проверка, заполнена ли вкладка
-            _isTabFilled(tabName) {
-                const record = Store.findToday();
-                if (!record) return false;
-
+            _getTabData(tabName) {
+                const record = this._getRecord();
                 if (tabName === 'main') {
-                    return !!(record.goal || record.victory || record.energy);
+                    return {
+                        energy: record.energy || 5,
+                        goal: record.goal || '',
+                        victory: record.victory || '',
+                        word: record.word || '',
+                        sport: record.sport || 'Нет'
+                    };
                 }
                 if (tabName === 'body') {
-                    return !!(record.body && (record.body.water || record.body.sleep || record.body.food || record.body
-                        .energy));
+                    return record.body || { water: 5, sleep: 7, food: '', energy: 7, note: '' };
                 }
                 if (tabName === 'mind') {
-                    return !!(record.mind && (record.mind.mood || record.mind.stress || record.mind.gratitude));
+                    return record.mind || { mood: '😊', stress: 3, meditation: 'yes', gratitude: '', note: '' };
                 }
                 if (tabName === 'work') {
-                    return !!(record.work && (record.work.goal || record.work.done || record.work.result));
+                    return record.work || { goal: '', done: '', result: '', progress: 7, note: '' };
                 }
                 if (tabName === 'soul') {
-                    return !!(record.soul && (record.soul.communication || record.soul.hobby || record.soul.loved));
+                    return record.soul || { communication: '', hobby: '', loved: '', growth: '', note: '' };
+                }
+                return {};
+            },
+
+            _isTabFilled(tabName) {
+                const data = this._getTabData(tabName);
+                if (tabName === 'main') {
+                    return !!(data.goal || data.victory || data.energy);
+                }
+                if (tabName === 'body') {
+                    return !!(data.water || data.sleep || data.food || data.energy);
+                }
+                if (tabName === 'mind') {
+                    return !!(data.mood || data.stress || data.gratitude);
+                }
+                if (tabName === 'work') {
+                    return !!(data.goal || data.done || data.result);
+                }
+                if (tabName === 'soul') {
+                    return !!(data.communication || data.hobby || data.loved);
                 }
                 return false;
             },
 
-            // Обновление индикаторов и прогресса
-            _updateTabs() {
+            _getAllTabsFilled() {
+                const tabs = ['main', 'body', 'mind', 'work', 'soul'];
+                let filled = 0;
+                tabs.forEach(t => {
+                    if (this._isTabFilled(t)) filled++;
+                });
+                return filled;
+            },
+
+            _updateUI() {
                 const tabs = ['main', 'body', 'mind', 'work', 'soul'];
                 let filled = 0;
 
@@ -2367,9 +2619,10 @@
                             dot.className = 'status-dot empty';
                         }
                     }
+                    // Обновляем состояние вкладки
+                    this.updateTabState(tab);
                 });
 
-                // Прогресс
                 const total = tabs.length;
                 const percent = (filled / total) * 100;
                 const fillEl = document.getElementById('progress-fill');
@@ -2377,332 +2630,310 @@
                 if (fillEl) fillEl.style.width = percent + '%';
                 if (textEl) textEl.textContent = `${filled}/${total}`;
 
-                // Если все 5 заполнены — блокируем день
+                // Проверяем, все ли вкладки заполнены
+                const record = this._getRecord();
                 if (filled === total) {
-                    const record = Store.findToday();
-                    if (record) {
-                        this._lockDay(record);
-                    }
-                } else {
-                    // Если не все — разблокируем
-                    this._unlockDay();
-                }
-            },
-
-            load() {
-                const record = Store.findToday();
-                if (record) {
-                    this._fillForm(record);
-                    // Проверяем, все ли вкладки заполнены
-                    const total = 5;
-                    let filled = 0;
-                    ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
-                        if (this._isTabFilled(tab)) filled++;
-                    });
-                    if (filled === total) {
-                        this._lockDay(record);
-                    } else {
-                        this._unlockDay();
-                    }
+                    this._lockDay(record);
                 } else {
                     this._unlockDay();
-                    this._clearForm();
                 }
-                this._updateUI();
-                this._updateTabs();
-            },
 
-            _fillForm(record) {
-                // Основное
-                document.getElementById('today-energy').value = record.energy || 5;
-                document.getElementById('energy-val').innerText = record.energy || 5;
-                document.getElementById('today-sport').value = record.sport || 'Нет';
-                ['goal', 'subgoals', 'victory', 'thanks', 'refusal', 'lesson', 'word'].forEach(f => {
-                    document.getElementById(`today-${f}`).value = record[f] || '';
-                });
-
-                // Тело
-                const body = record.body || {};
-                document.getElementById('body-water').value = body.water || 5;
-                document.getElementById('body-water-val').innerText = body.water || 5;
-                document.getElementById('body-sleep').value = body.sleep || 7;
-                document.getElementById('body-sleep-val').innerText = body.sleep || 7;
-                document.getElementById('body-food').value = body.food || '';
-                document.getElementById('body-energy').value = body.energy || 7;
-                document.getElementById('body-energy-val').innerText = body.energy || 7;
-                document.getElementById('body-note').value = body.note || '';
-
-                // Мозг
-                const mind = record.mind || {};
-                const mood = mind.mood || '😊';
-                document.getElementById('mind-mood').value = mood;
-                document.querySelectorAll('.mood-selector .mood-btn').forEach(el => {
-                    el.classList.toggle('active', el.dataset.mood === mood);
-                });
-                document.getElementById('mind-stress').value = mind.stress || 3;
-                document.getElementById('mind-stress-val').innerText = mind.stress || 3;
-                const meditation = mind.meditation || 'yes';
-                document.getElementById('mind-meditation').value = meditation;
-                document.querySelectorAll('#meditation-toggle .toggle-btn').forEach(el => {
-                    el.classList.toggle('active', el.dataset.value === meditation);
-                });
-                document.getElementById('mind-gratitude').value = mind.gratitude || '';
-                document.getElementById('mind-note').value = mind.note || '';
-
-                // Дела
-                const work = record.work || {};
-                document.getElementById('work-goal').value = work.goal || '';
-                document.getElementById('work-done').value = work.done || '';
-                document.getElementById('work-result').value = work.result || '';
-                document.getElementById('work-progress').value = work.progress || 7;
-                document.getElementById('work-progress-val').innerText = work.progress || 7;
-                document.getElementById('work-note').value = work.note || '';
-
-                // Душа
-                const soul = record.soul || {};
-                document.getElementById('soul-communication').value = soul.communication || '';
-                document.getElementById('soul-hobby').value = soul.hobby || '';
-                document.getElementById('soul-loved').value = soul.loved || '';
-                document.getElementById('soul-growth').value = soul.growth || '';
-                document.getElementById('soul-note').value = soul.note || '';
+                // Обновляем сводку дня
+                this._updateSummary(record);
             },
 
             _lockDay(record) {
-                this._mode = 'view';
-                document.getElementById('fields-wrapper').classList.add('hidden');
                 const banner = document.getElementById('day-locked-banner');
                 banner.classList.add('visible');
-                document.getElementById('banner-date').textContent = `✅ ${record.formattedDate || this.formattedDate}`;
+                document.getElementById('banner-date').textContent = `✅ ${record.formattedDate || DayManager.formattedDate}`;
                 document.getElementById('banner-energy').textContent = `⚡ ${record.energy || 5}/10`;
                 document.getElementById('banner-goal').textContent = `🎯 ${record.goal || '—'}`;
                 document.getElementById('banner-victory').textContent = `🏆 ${record.victory || '—'}`;
-                document.getElementById('today-status').textContent = '✅ Сохранено';
+                document.getElementById('today-status').textContent = '✅ День заполнен';
                 document.getElementById('today-status').style.color = 'var(--success)';
+
+                // Показываем сводку в вкладке "Основное"
+                const summary = document.getElementById('day-summary');
+                summary.classList.add('visible');
             },
 
             _unlockDay() {
-                this._mode = 'view';
-                // Показываем поля только если не все вкладки заполнены
-                const total = 5;
-                let filled = 0;
-                ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
-                    if (this._isTabFilled(tab)) filled++;
-                });
-                if (filled < total) {
-                    document.getElementById('fields-wrapper').classList.remove('hidden');
+                document.getElementById('day-locked-banner').classList.remove('visible');
+                document.getElementById('today-status').textContent = '';
+                const summary = document.getElementById('day-summary');
+                summary.classList.remove('visible');
+            },
+
+            _updateSummary(record) {
+                if (!record) record = this._getRecord();
+                const body = record.body || {};
+                const mind = record.mind || {};
+                const work = record.work || {};
+                const soul = record.soul || {};
+
+                document.getElementById('summary-energy').textContent = record.energy || 0;
+                const progress = work.progress ? Math.round(work.progress * 10) : 0;
+                document.getElementById('summary-progress').textContent = progress;
+
+                document.getElementById('s-body-water').textContent = body.water || '—';
+                document.getElementById('s-body-sleep').textContent = body.sleep || '—';
+                document.getElementById('s-body-energy').textContent = body.energy || '—';
+
+                document.getElementById('s-mind-mood').textContent = mind.mood || '—';
+                document.getElementById('s-mind-stress').textContent = mind.stress || '—';
+                document.getElementById('s-mind-meditation').textContent = mind.meditation === 'yes' ? '✅ Да' : '❌ Нет';
+
+                document.getElementById('s-work-goal').textContent = work.goal || '—';
+                document.getElementById('s-work-result').textContent = work.result || '—';
+
+                document.getElementById('s-soul-communication').textContent = soul.communication || '—';
+                document.getElementById('s-soul-hobby').textContent = soul.hobby || '—';
+
+                document.getElementById('summary-word').textContent = record.word || '—';
+            },
+
+            updateTabState(tabName) {
+                const isFilled = this._isTabFilled(tabName);
+                const fields = document.getElementById(`tab-${tabName}-fields`);
+                const collapsed = document.getElementById(`collapsed-${tabName}`);
+
+                if (isFilled) {
+                    if (fields) fields.style.display = 'none';
+                    if (collapsed) collapsed.style.display = 'block';
+                    // Заполняем collapsed данными
+                    this._fillCollapsed(tabName);
                 } else {
-                    document.getElementById('fields-wrapper').classList.add('hidden');
-                }
-                document.getElementById('day-locked-banner').classList.remove('visible');
-                document.getElementById('today-status').textContent = filled < total ? '' : '✅ Сохранено';
-                if (filled < total) {
-                    document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
-                        .forEach(el => el.disabled = false);
-                    const btn = document.getElementById('save-btn');
-                    btn.textContent = '💾 Сохранить день';
-                    btn.disabled = false;
-                    btn.className = 'btn-save';
+                    if (fields) fields.style.display = 'block';
+                    if (collapsed) collapsed.style.display = 'none';
                 }
             },
 
-            _clearForm() {
-                // Основное
-                document.getElementById('today-energy').value = 5;
-                document.getElementById('energy-val').innerText = 5;
-                document.getElementById('today-sport').value = 'Нет';
-                ['goal', 'subgoals', 'victory', 'thanks', 'refusal', 'lesson', 'word'].forEach(f => {
-                    document.getElementById(`today-${f}`).value = '';
-                });
-
-                // Тело
-                document.getElementById('body-water').value = 5;
-                document.getElementById('body-water-val').innerText = 5;
-                document.getElementById('body-sleep').value = 7;
-                document.getElementById('body-sleep-val').innerText = 7;
-                document.getElementById('body-food').value = '';
-                document.getElementById('body-energy').value = 7;
-                document.getElementById('body-energy-val').innerText = 7;
-                document.getElementById('body-note').value = '';
-
-                // Мозг
-                document.getElementById('mind-mood').value = '😊';
-                document.querySelectorAll('.mood-selector .mood-btn').forEach(el => {
-                    el.classList.toggle('active', el.dataset.mood === '😊');
-                });
-                document.getElementById('mind-stress').value = 3;
-                document.getElementById('mind-stress-val').innerText = 3;
-                document.getElementById('mind-meditation').value = 'yes';
-                document.querySelectorAll('#meditation-toggle .toggle-btn').forEach(el => {
-                    el.classList.toggle('active', el.dataset.value === 'yes');
-                });
-                document.getElementById('mind-gratitude').value = '';
-                document.getElementById('mind-note').value = '';
-
-                // Дела
-                document.getElementById('work-goal').value = '';
-                document.getElementById('work-done').value = '';
-                document.getElementById('work-result').value = '';
-                document.getElementById('work-progress').value = 7;
-                document.getElementById('work-progress-val').innerText = 7;
-                document.getElementById('work-note').value = '';
-
-                // Душа
-                document.getElementById('soul-communication').value = '';
-                document.getElementById('soul-hobby').value = '';
-                document.getElementById('soul-loved').value = '';
-                document.getElementById('soul-growth').value = '';
-                document.getElementById('soul-note').value = '';
-            },
-
-            enableEdit() {
-                if (this._mode === 'edit') return;
-                this._mode = 'edit';
-                document.getElementById('fields-wrapper').classList.remove('hidden');
-                document.getElementById('day-locked-banner').classList.remove('visible');
-                document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
-                    .forEach(el => el.disabled = false);
-                const btn = document.getElementById('save-btn');
-                btn.textContent = '💾 Сохранить изменения';
-                btn.disabled = false;
-                btn.className = 'btn-save edit-mode';
-                Toast.show('✏️ Режим редактирования', 'warning');
-            },
-
-            enableAppend() {
-                if (this._mode === 'append') return;
-                this._mode = 'append';
-                document.getElementById('fields-wrapper').classList.remove('hidden');
-                document.getElementById('day-locked-banner').classList.remove('visible');
-                document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
-                    .forEach(el => el.disabled = false);
-                const btn = document.getElementById('save-btn');
-                btn.textContent = '➕ Добавить к дню';
-                btn.disabled = false;
-                btn.className = 'btn-save append-mode';
-                Toast.show('➕ Режим дополнения', 'warning');
-            },
-
-            save() {
-                const record = {
-                    date: this.todayKey,
-                    formattedDate: this.formattedDate,
-                    // Основное
-                    energy: document.getElementById('today-energy').value,
-                    sport: document.getElementById('today-sport').value,
-                    goal: document.getElementById('today-goal').value.trim(),
-                    subgoals: document.getElementById('today-subgoals').value.trim(),
-                    victory: document.getElementById('today-victory').value.trim(),
-                    thanks: document.getElementById('today-thanks').value.trim(),
-                    refusal: document.getElementById('today-refusal').value.trim(),
-                    lesson: document.getElementById('today-lesson').value.trim(),
-                    word: document.getElementById('today-word').value.trim(),
-                    // Тело
+            _fillCollapsed(tabName) {
+                const data = this._getTabData(tabName);
+                const map = {
+                    main: {
+                        energy: 'c-main-energy',
+                        goal: 'c-main-goal',
+                        victory: 'c-main-victory'
+                    },
                     body: {
-                        water: document.getElementById('body-water').value,
-                        sleep: document.getElementById('body-sleep').value,
-                        food: document.getElementById('body-food').value.trim(),
-                        energy: document.getElementById('body-energy').value,
-                        note: document.getElementById('body-note').value.trim()
+                        water: 'c-body-water',
+                        sleep: 'c-body-sleep',
+                        energy: 'c-body-energy'
                     },
-                    // Мозг
                     mind: {
-                        mood: document.getElementById('mind-mood').value,
-                        stress: document.getElementById('mind-stress').value,
-                        meditation: document.getElementById('mind-meditation').value,
-                        gratitude: document.getElementById('mind-gratitude').value.trim(),
-                        note: document.getElementById('mind-note').value.trim()
+                        mood: 'c-mind-mood',
+                        stress: 'c-mind-stress',
+                        meditation: 'c-mind-meditation'
                     },
-                    // Дела
                     work: {
-                        goal: document.getElementById('work-goal').value.trim(),
-                        done: document.getElementById('work-done').value.trim(),
-                        result: document.getElementById('work-result').value.trim(),
-                        progress: document.getElementById('work-progress').value,
-                        note: document.getElementById('work-note').value.trim()
+                        goal: 'c-work-goal',
+                        result: 'c-work-result',
+                        progress: 'c-work-progress'
                     },
-                    // Душа
                     soul: {
-                        communication: document.getElementById('soul-communication').value.trim(),
-                        hobby: document.getElementById('soul-hobby').value.trim(),
-                        loved: document.getElementById('soul-loved').value.trim(),
-                        growth: document.getElementById('soul-growth').value.trim(),
-                        note: document.getElementById('soul-note').value.trim()
+                        communication: 'c-soul-communication',
+                        hobby: 'c-soul-hobby',
+                        loved: 'c-soul-loved'
                     }
                 };
 
-                // Проверяем, есть ли хоть что-то во всех 5 вкладках
-                const hasMain = record.goal || record.victory || record.energy;
-                const hasBody = record.body.water || record.body.sleep || record.body.food || record.body.energy;
-                const hasMind = record.mind.mood || record.mind.stress || record.mind.gratitude;
-                const hasWork = record.work.goal || record.work.done || record.work.result;
-                const hasSoul = record.soul.communication || record.soul.hobby || record.soul.loved;
+                const fields = map[tabName];
+                if (!fields) return;
 
-                if (!hasMain && !hasBody && !hasMind && !hasWork && !hasSoul && this._mode !== 'append') {
-                    Toast.show('⚠️ Заполните хотя бы одну вкладку', 'warning');
-                    return;
+                if (tabName === 'main') {
+                    document.getElementById(fields.energy).textContent = data.energy || '—';
+                    document.getElementById(fields.goal).textContent = data.goal || '—';
+                    document.getElementById(fields.victory).textContent = data.victory || '—';
+                } else if (tabName === 'body') {
+                    document.getElementById(fields.water).textContent = data.water || '—';
+                    document.getElementById(fields.sleep).textContent = data.sleep || '—';
+                    document.getElementById(fields.energy).textContent = data.energy || '—';
+                } else if (tabName === 'mind') {
+                    document.getElementById(fields.mood).textContent = data.mood || '—';
+                    document.getElementById(fields.stress).textContent = data.stress || '—';
+                    document.getElementById(fields.meditation).textContent = data.meditation === 'yes' ? '✅ Да' :
+                    '❌ Нет';
+                } else if (tabName === 'work') {
+                    document.getElementById(fields.goal).textContent = data.goal || '—';
+                    document.getElementById(fields.result).textContent = data.result || '—';
+                    document.getElementById(fields.progress).textContent = data.progress ? Math.round(data.progress *
+                        10) : '—';
+                } else if (tabName === 'soul') {
+                    document.getElementById(fields.communication).textContent = data.communication || '—';
+                    document.getElementById(fields.hobby).textContent = data.hobby || '—';
+                    document.getElementById(fields.loved).textContent = data.loved || '—';
                 }
-
-                const btn = document.getElementById('save-btn');
-                btn.textContent = '⏳ ...';
-                btn.disabled = true;
-
-                let entries = Store.getAll();
-                const existingIndex = entries.findIndex(item => item.date === this.todayKey);
-
-                if (this._mode === 'append' && existingIndex >= 0) {
-                    const existing = entries[existingIndex];
-                    // Дополняем только текстовые поля
-                    const fields = ['goal', 'subgoals', 'victory', 'thanks', 'refusal', 'lesson', 'word'];
-                    fields.forEach(f => {
-                        if (record[f]) {
-                            record[f] = existing[f] ? existing[f] + '\n✧ ' + record[f] : record[f];
-                        } else {
-                            record[f] = existing[f] || '';
-                        }
-                    });
-                    ['body', 'mind', 'work', 'soul'].forEach(section => {
-                        Object.keys(record[section]).forEach(key => {
-                            if (record[section][key] && existing[section] && existing[section][key]) {
-                                record[section][key] = existing[section][key] + '\n✧ ' + record[section][
-                                key];
-                            } else if (existing[section] && existing[section][key]) {
-                                record[section][key] = existing[section][key];
-                            }
-                        });
-                    });
-                    record.energy = existing.energy || record.energy;
-                    record.sport = existing.sport || record.sport;
-                    entries[existingIndex] = record;
-                    Toast.show('➕ День дополнен!', 'success');
-                } else if (existingIndex >= 0) {
-                    if (!confirm('📝 День уже сохранён. Перезаписать?')) {
-                        btn.textContent = '💾 Сохранить день';
-                        btn.disabled = false;
-                        return;
-                    }
-                    entries[existingIndex] = record;
-                    Toast.show('✏️ День обновлён!', 'success');
-                } else {
-                    entries.push(record);
-                    Toast.show('🚀 День сохранён!', 'success');
-                }
-
-                Store.save(entries);
-                this._mode = 'view';
-                this.load();
-                document.getElementById('streak-count').textContent = Store.getStreak();
-                this._updateTabs();
-                btn.textContent = '✅ Сохранено!';
-                setTimeout(() => {
-                    btn.textContent = '💾 Сохранить день';
-                    btn.disabled = false;
-                    btn.className = 'btn-save';
-                }, 1500);
             },
 
-            _updateUI() {
+            saveTab(tabName) {
+                const record = Store.findToday() || {
+                    date: DayManager.todayKey,
+                    formattedDate: DayManager.formattedDate
+                };
+
+                // Собираем данные из текущей вкладки
+                if (tabName === 'main') {
+                    record.energy = document.getElementById('today-energy').value;
+                    record.sport = document.getElementById('today-sport').value;
+                    record.goal = document.getElementById('today-goal').value.trim();
+                    record.subgoals = document.getElementById('today-subgoals').value.trim();
+                    record.victory = document.getElementById('today-victory').value.trim();
+                    record.thanks = document.getElementById('today-thanks').value.trim();
+                    record.refusal = document.getElementById('today-refusal').value.trim();
+                    record.lesson = document.getElementById('today-lesson').value.trim();
+                    record.word = document.getElementById('today-word').value.trim();
+                } else if (tabName === 'body') {
+                    if (!record.body) record.body = {};
+                    record.body.water = document.getElementById('body-water').value;
+                    record.body.sleep = document.getElementById('body-sleep').value;
+                    record.body.food = document.getElementById('body-food').value.trim();
+                    record.body.energy = document.getElementById('body-energy').value;
+                    record.body.note = document.getElementById('body-note').value.trim();
+                } else if (tabName === 'mind') {
+                    if (!record.mind) record.mind = {};
+                    record.mind.mood = document.getElementById('mind-mood').value;
+                    record.mind.stress = document.getElementById('mind-stress').value;
+                    record.mind.meditation = document.getElementById('mind-meditation').value;
+                    record.mind.gratitude = document.getElementById('mind-gratitude').value.trim();
+                    record.mind.note = document.getElementById('mind-note').value.trim();
+                } else if (tabName === 'work') {
+                    if (!record.work) record.work = {};
+                    record.work.goal = document.getElementById('work-goal').value.trim();
+                    record.work.done = document.getElementById('work-done').value.trim();
+                    record.work.result = document.getElementById('work-result').value.trim();
+                    record.work.progress = document.getElementById('work-progress').value;
+                    record.work.note = document.getElementById('work-note').value.trim();
+                } else if (tabName === 'soul') {
+                    if (!record.soul) record.soul = {};
+                    record.soul.communication = document.getElementById('soul-communication').value.trim();
+                    record.soul.hobby = document.getElementById('soul-hobby').value.trim();
+                    record.soul.loved = document.getElementById('soul-loved').value.trim();
+                    record.soul.growth = document.getElementById('soul-growth').value.trim();
+                    record.soul.note = document.getElementById('soul-note').value.trim();
+                }
+
+                // Сохраняем
+                let entries = Store.getAll();
+                const existingIndex = entries.findIndex(item => item.date === DayManager.todayKey);
+                if (existingIndex >= 0) {
+                    entries[existingIndex] = record;
+                } else {
+                    entries.push(record);
+                }
+                Store.save(entries);
+
+                Toast.show(`✅ Вкладка «${this._getTabLabel(tabName)}» сохранена!`, 'success');
+
+                // Обновляем UI
+                this._updateUI();
                 document.getElementById('streak-count').textContent = Store.getStreak();
+                // Обновляем дату
                 UI.updateDate();
+            },
+
+            _getTabLabel(tabName) {
+                const map = {
+                    main: 'Основное',
+                    body: 'Тело',
+                    mind: 'Мозг',
+                    work: 'Дела',
+                    soul: 'Душа'
+                };
+                return map[tabName] || tabName;
+            },
+
+            editTab(tabName) {
+                // Разблокируем поля вкладки
+                const fields = document.getElementById(`tab-${tabName}-fields`);
+                const collapsed = document.getElementById(`collapsed-${tabName}`);
+                if (fields) {
+                    fields.style.display = 'block';
+                    // Активируем все поля
+                    fields.querySelectorAll('input, textarea, select').forEach(el => el.disabled = false);
+                }
+                if (collapsed) collapsed.style.display = 'none';
+                Toast.show(`✏️ Режим редактирования: ${this._getTabLabel(tabName)}`, 'warning');
+            },
+
+            appendTab(tabName) {
+                this.editTab(tabName);
+                Toast.show(`➕ Режим дополнения: ${this._getTabLabel(tabName)}`, 'warning');
+            },
+
+            load() {
+                // Загружаем данные в поля из записи
+                const record = Store.findToday();
+                if (record) {
+                    // Заполняем поля
+                    if (record.energy) {
+                        document.getElementById('today-energy').value = record.energy;
+                        document.getElementById('energy-val').innerText = record.energy;
+                    }
+                    if (record.sport) document.getElementById('today-sport').value = record.sport;
+                    ['goal', 'subgoals', 'victory', 'thanks', 'refusal', 'lesson', 'word'].forEach(f => {
+                        if (record[f]) document.getElementById(`today-${f}`).value = record[f];
+                    });
+
+                    if (record.body) {
+                        const b = record.body;
+                        if (b.water) { document.getElementById('body-water').value = b.water;
+                            document.getElementById('body-water-val').innerText = b.water; }
+                        if (b.sleep) { document.getElementById('body-sleep').value = b.sleep;
+                            document.getElementById('body-sleep-val').innerText = b.sleep; }
+                        if (b.food) document.getElementById('body-food').value = b.food;
+                        if (b.energy) { document.getElementById('body-energy').value = b.energy;
+                            document.getElementById('body-energy-val').innerText = b.energy; }
+                        if (b.note) document.getElementById('body-note').value = b.note;
+                    }
+
+                    if (record.mind) {
+                        const m = record.mind;
+                        if (m.mood) {
+                            document.getElementById('mind-mood').value = m.mood;
+                            document.querySelectorAll('.mood-selector .mood-btn').forEach(el => {
+                                el.classList.toggle('active', el.dataset.mood === m.mood);
+                            });
+                        }
+                        if (m.stress) { document.getElementById('mind-stress').value = m.stress;
+                            document.getElementById('mind-stress-val').innerText = m.stress; }
+                        if (m.meditation) {
+                            document.getElementById('mind-meditation').value = m.meditation;
+                            document.querySelectorAll('#meditation-toggle .toggle-btn').forEach(el => {
+                                el.classList.toggle('active', el.dataset.value === m.meditation);
+                            });
+                        }
+                        if (m.gratitude) document.getElementById('mind-gratitude').value = m.gratitude;
+                        if (m.note) document.getElementById('mind-note').value = m.note;
+                    }
+
+                    if (record.work) {
+                        const w = record.work;
+                        if (w.goal) document.getElementById('work-goal').value = w.goal;
+                        if (w.done) document.getElementById('work-done').value = w.done;
+                        if (w.result) document.getElementById('work-result').value = w.result;
+                        if (w.progress) { document.getElementById('work-progress').value = w.progress;
+                            document.getElementById('work-progress-val').innerText = w.progress; }
+                        if (w.note) document.getElementById('work-note').value = w.note;
+                    }
+
+                    if (record.soul) {
+                        const s = record.soul;
+                        if (s.communication) document.getElementById('soul-communication').value = s.communication;
+                        if (s.hobby) document.getElementById('soul-hobby').value = s.hobby;
+                        if (s.loved) document.getElementById('soul-loved').value = s.loved;
+                        if (s.growth) document.getElementById('soul-growth').value = s.growth;
+                        if (s.note) document.getElementById('soul-note').value = s.note;
+                    }
+                }
+
+                // Обновляем UI
+                this._updateUI();
+                this._updateSummary(record);
+                // Обновляем состояние всех вкладок
+                ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
+                    this.updateTabState(tab);
+                });
             }
         };
 
@@ -2713,6 +2944,36 @@
             updateDate() {
                 const date = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
                 document.getElementById('today-date-display').textContent = `📅 Сегодня: ${date}`;
+            }
+        };
+
+        // ===================================================================
+        //  DAY MANAGER (основной контроллер)
+        // ===================================================================
+        const DayManager = {
+            get todayKey() { return new Date().toISOString().slice(0, 10); },
+            get formattedDate() {
+                return new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+            },
+
+            load() {
+                TabManager.load();
+                document.getElementById('streak-count').textContent = Store.getStreak();
+            },
+
+            enableEdit() {
+                // Разблокируем все вкладки для редактирования
+                ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
+                    TabManager.editTab(tab);
+                });
+                Toast.show('✏️ Режим редактирования всего дня', 'warning');
+            },
+
+            enableAppend() {
+                ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
+                    TabManager.appendTab(tab);
+                });
+                Toast.show('➕ Режим дополнения всего дня', 'warning');
             }
         };
 
@@ -3225,7 +3486,7 @@
                 ['lastname', 'firstname', 'middlename', 'city', 'age'].forEach(f => {
                     document.getElementById(`user-${f}`).value = '';
                 });
-                DayManager._clearForm();
+                TabManager._updateUI();
                 document.getElementById('streak-count').textContent = '0';
                 document.getElementById('today-status').textContent = '';
                 Toast.show('🗑 Вся база очищена!', 'warning');
@@ -3272,9 +3533,9 @@
         };
 
         // ===================================================================
-        //  SCREENSHOT EXPORT
+        //  STORIES EXPORT
         // ===================================================================
-        const ScreenshotExport = {
+        const StoriesExport = {
             async export() {
                 const btn = document.querySelector('.btn-action.screenshot');
                 btn.textContent = '⏳';
@@ -3294,24 +3555,24 @@
                         'Пользователь';
                     const cityAge = [profile.city, profile.age ? profile.age + ' лет' : ''].filter(Boolean).join(' • ');
                     const streak = Store.getStreak();
-                    const totalDays = entries.length;
-                    const avgEnergy = (entries.reduce((s, e) => s + parseFloat(e.energy), 0) / entries.length).toFixed(1);
-                    const goalsCount = entries.filter(e => e.goal).length;
 
-                    const victories = entries
-                        .filter(e => e.victory)
-                        .sort((a, b) => new Date(b.date) - new Date(a.date))
-                        .slice(0, 5);
+                    // Берём последний день
+                    const sorted = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+                    const day = sorted[0] || {};
+                    const body = day.body || {};
+                    const mind = day.mind || {};
+                    const work = day.work || {};
+                    const soul = day.soul || {};
 
-                    const container = document.getElementById('screenshot-container');
+                    const container = document.getElementById('stories-container');
                     const avatar = localStorage.getItem('user_avatar_img') || '';
 
                     container.innerHTML = `
-                        <div class="screenshot-header">
-                            <div class="logo">⚡ Life Dashboard</div>
-                            <div class="date">${new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'})}</div>
+                        <div class="stories-header">
+                            <div class="logo">⚡ HUB</div>
+                            <div class="date">${day.formattedDate || new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'})}</div>
                         </div>
-                        <div class="screenshot-profile">
+                        <div class="stories-profile">
                             <div class="avatar">${avatar ? `<img src="${avatar}" alt="Avatar">` : '👤'}</div>
                             <div class="info">
                                 <div class="name">${fullName}</div>
@@ -3319,86 +3580,76 @@
                                 <div class="streak">🔥 Серия: ${streak} дней</div>
                             </div>
                         </div>
-                        <div class="screenshot-stats">
-                            <div class="stat">
-                                <div class="label">Всего дней</div>
-                                <div class="value">${totalDays}</div>
+                        <div class="stories-body">
+                            <div class="block">
+                                <div class="label">📋 Основное</div>
+                                <div class="row">
+                                    <div class="item">⚡ Энергия: <span class="val">${day.energy || '—'}/10</span></div>
+                                    <div class="item">🎯 Цель: <span class="val">${day.goal || '—'}</span></div>
+                                    <div class="item">🏆 Победа: <span class="val">${day.victory || '—'}</span></div>
+                                </div>
                             </div>
-                            <div class="stat">
-                                <div class="label">Средняя энергия</div>
-                                <div class="value">${avgEnergy}</div>
+                            <div class="block">
+                                <div class="label">🧘‍♂️ Тело</div>
+                                <div class="row">
+                                    <div class="item">💧 Вода: <span class="val">${body.water || '—'} стак.</span></div>
+                                    <div class="item">😴 Сон: <span class="val">${body.sleep || '—'} ч</span></div>
+                                    <div class="item">💪 Энергия: <span class="val">${body.energy || '—'}/10</span></div>
+                                </div>
                             </div>
-                            <div class="stat">
-                                <div class="label">Закрыто целей</div>
-                                <div class="value">${goalsCount}</div>
+                            <div class="block">
+                                <div class="label">🧠 Мозг</div>
+                                <div class="row">
+                                    <div class="item">😊 Настроение: <span class="val">${mind.mood || '—'}</span></div>
+                                    <div class="item">🧠 Стресс: <span class="val">${mind.stress || '—'}/10</span></div>
+                                    <div class="item">🧘 Медитация: <span class="val">${mind.meditation === 'yes' ? '✅ Да' : '❌ Нет'}</span></div>
+                                </div>
+                            </div>
+                            <div class="block">
+                                <div class="label">💼 Дела</div>
+                                <div class="row">
+                                    <div class="item">🎯 Цель: <span class="val">${work.goal || '—'}</span></div>
+                                    <div class="item">🏆 Результат: <span class="val">${work.result || '—'}</span></div>
+                                    <div class="item">📊 Прогресс: <span class="val">${work.progress ? Math.round(work.progress * 10) : '—'}%</span></div>
+                                </div>
+                            </div>
+                            <div class="block">
+                                <div class="label">❤️ Душа</div>
+                                <div class="row">
+                                    <div class="item">👥 Общение: <span class="val">${soul.communication || '—'}</span></div>
+                                    <div class="item">🎨 Хобби: <span class="val">${soul.hobby || '—'}</span></div>
+                                    <div class="item">💕 Близкие: <span class="val">${soul.loved || '—'}</span></div>
+                                </div>
+                            </div>
+                            <div class="block summary-block">
+                                <div class="label">📊 ИТОГИ ДНЯ</div>
+                                <div class="row">
+                                    <div class="item">🔥 Энергия: <span class="val">${day.energy || '—'}/10</span></div>
+                                    <div class="item">📈 Прогресс: <span class="val">${work.progress ? Math.round(work.progress * 10) : '—'}%</span></div>
+                                    <div class="item">💬 Слово дня: <span class="val">${day.word || '—'}</span></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="screenshot-chart">
-                            <div class="title">📈 Динамика энергии (последние 7 дней)</div>
-                            <canvas id="screenshot-chart-canvas"></canvas>
-                        </div>
-                        <div class="screenshot-victories">
-                            <div class="title">🏆 Последние победы</div>
-                            ${victories.length > 0 ? victories.map(v => 
-                                `<div class="victory-item">${v.victory} <span style="color:#94a3b8; font-size:10px;">— ${v.formattedDate}</span></div>`
-                            ).join('') : '<div style="color:#94a3b8; font-size:12px;">Пока нет записанных побед</div>'}
-                        </div>
-                        <div class="screenshot-footer">Сгенерировано в Life Dashboard v6.1</div>
+                        <div class="stories-footer">⚡ Life Dashboard v6.1</div>
                     `;
-
-                    const sorted = entries.sort((a, b) => new Date(a.date) - new Date(b.date));
-                    const last7 = sorted.slice(-7);
-                    const labels = last7.map(e => e.formattedDate.split(' ')[0] + ' ' + e.formattedDate.split(' ')[1]);
-                    const data = last7.map(e => parseFloat(e.energy) || 0);
-
-                    const ctx = document.getElementById('screenshot-chart-canvas').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Энергия',
-                                data: data,
-                                borderColor: '#6366f1',
-                                backgroundColor: 'rgba(99,102,241,0.15)',
-                                fill: true,
-                                tension: 0.3,
-                                pointBackgroundColor: '#6366f1',
-                                pointRadius: 4
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { labels: { color: '#94a3b8', font: { size: 9 } } }
-                            },
-                            scales: {
-                                y: { min: 0, max: 10, ticks: { color: '#94a3b8', font: { size: 8 } } },
-                                x: { ticks: { color: '#94a3b8', font: { size: 8 } } }
-                            }
-                        }
-                    });
-
-                    await new Promise(resolve => setTimeout(resolve, 500));
 
                     const canvas = await html2canvas(container, {
                         scale: 2,
                         backgroundColor: '#0a0a0f',
                         useCORS: true,
                         logging: false,
-                        width: 600,
-                        height: container.scrollHeight
+                        width: 400,
+                        height: 700
                     });
 
                     const link = document.createElement('a');
-                    link.download = `card_${new Date().toISOString().slice(0,10)}.png`;
+                    link.download = `story_${new Date().toISOString().slice(0,10)}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
 
-                    Toast.show('📸 Скриншот сохранён!', 'success');
+                    Toast.show('📸 Stories-скриншот сохранён!', 'success');
                 } catch (error) {
-                    console.error('Screenshot Error:', error);
+                    console.error('Stories Error:', error);
                     Toast.show('❌ Ошибка при создании скриншота', 'error');
                 }
 
@@ -3489,7 +3740,7 @@
             const msUntilMidnight = tomorrow - now;
 
             setTimeout(() => {
-                DayManager.load();
+                TabManager.load();
                 UI.updateDate();
                 document.getElementById('streak-count').textContent = Store.getStreak();
                 if (document.getElementById('sec-stats').classList.contains('active')) {
@@ -3511,7 +3762,7 @@
             UI.updateDate();
             document.getElementById('streak-count').textContent = Store.getStreak();
             ProfileManager.load();
-            DayManager.load();
+            TabManager.load();
             PinManager.init();
             SettingsManager.load();
             Notifications.init();
@@ -3528,7 +3779,6 @@
         window.checkPin = () => PinManager.check();
         window.uploadAvatar = (input) => ProfileManager.uploadAvatar(input);
         window.startVoice = (id, btn) => VoiceInput.start(id, btn);
-        window.saveToday = () => DayManager.save();
         window.openSection = (name, btn) => Sidebar.openSection(name, btn);
         window.switchArchiveTab = (tab, btn) => ArchiveManager.switchTab(tab, btn);
         window.exportData = () => BackupManager.export();
@@ -3536,6 +3786,9 @@
         window.switchTab = switchTab;
         window.selectMood = selectMood;
         window.selectToggle = selectToggle;
+        window.saveTab = (tab) => TabManager.saveTab(tab);
+        window.editTab = (tab) => TabManager.editTab(tab);
+        window.appendTab = (tab) => TabManager.appendTab(tab);
 
         document.addEventListener('DOMContentLoaded', init);
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
