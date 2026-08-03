@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Life Dashboard v6.0</title>
+    <title>⚡ Life Dashboard v6.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ===================================================================
-           ROOT VARIABLES
+           ROOT VARIABLES (все темы — как в прошлой версии)
            =================================================================== */
         :root[data-theme="cyber"] {
             --bg: #090d16;
@@ -673,6 +673,7 @@
             padding-bottom: 2px;
             overflow-x: auto;
             scrollbar-width: none;
+            flex-wrap: nowrap;
         }
         .today-tabs::-webkit-scrollbar { display: none; }
         .today-tabs .tab-btn {
@@ -687,6 +688,9 @@
             transition: all 0.3s;
             white-space: nowrap;
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         .today-tabs .tab-btn:hover {
             color: var(--text-main);
@@ -707,7 +711,56 @@
             border-radius: 2px;
         }
         .today-tabs .tab-btn .icon {
-            margin-right: 4px;
+            margin-right: 2px;
+        }
+        .today-tabs .tab-btn .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .today-tabs .tab-btn .status-dot.filled {
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+        .today-tabs .tab-btn .status-dot.empty {
+            background: var(--text-muted);
+            opacity: 0.3;
+        }
+
+        /* Прогресс-бар */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding: 6px 12px;
+            background: var(--input-bg);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+        .progress-wrapper .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--card-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-wrapper .progress-bar .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent-primary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .progress-wrapper .progress-text {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            white-space: nowrap;
+            min-width: 60px;
+            text-align: right;
         }
 
         .tab-content {
@@ -815,7 +868,6 @@
             cursor: pointer;
         }
 
-        /* Кнопки выбора настроения */
         .mood-selector {
             display: flex;
             gap: 8px;
@@ -1502,7 +1554,7 @@
 
         <div class="bottom">
             <div style="padding: 0 12px; font-size: 8px; color: var(--text-muted); text-align: center; opacity: 0.5;">
-                v6.0 — Life Dashboard
+                v6.1
             </div>
         </div>
     </nav>
@@ -1585,19 +1637,32 @@
                         <div class="today-tabs" id="today-tabs">
                             <button class="tab-btn active" data-tab="tab-main" onclick="switchTab('tab-main', this)">
                                 <span class="icon">📋</span> Основное
+                                <span class="status-dot empty" id="dot-main"></span>
                             </button>
                             <button class="tab-btn" data-tab="tab-body" onclick="switchTab('tab-body', this)">
                                 <span class="icon">🧘‍♂️</span> Тело
+                                <span class="status-dot empty" id="dot-body"></span>
                             </button>
                             <button class="tab-btn" data-tab="tab-mind" onclick="switchTab('tab-mind', this)">
                                 <span class="icon">🧠</span> Мозг
+                                <span class="status-dot empty" id="dot-mind"></span>
                             </button>
                             <button class="tab-btn" data-tab="tab-work" onclick="switchTab('tab-work', this)">
                                 <span class="icon">💼</span> Дела
+                                <span class="status-dot empty" id="dot-work"></span>
                             </button>
                             <button class="tab-btn" data-tab="tab-soul" onclick="switchTab('tab-soul', this)">
                                 <span class="icon">❤️</span> Душа
+                                <span class="status-dot empty" id="dot-soul"></span>
                             </button>
+                        </div>
+
+                        <!-- Прогресс -->
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="progress-text" id="progress-text">0/5</span>
                         </div>
 
                         <!-- ================================================
@@ -1879,7 +1944,6 @@
                     <div id="insights-list"></div>
                 </div>
 
-                <!-- НОВЫЕ ГРАФИКИ -->
                 <div class="charts-grid">
                     <div class="chart-box">
                         <h2>💧 Вода</h2>
@@ -2254,7 +2318,7 @@
         }
 
         // ===================================================================
-        //  DAY MANAGER
+        //  DAY MANAGER (ОБНОВЛЁННАЯ ВЕРСИЯ)
         // ===================================================================
         const DayManager = {
             _mode: 'view',
@@ -2264,16 +2328,88 @@
                 return new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
             },
 
+            // Проверка, заполнена ли вкладка
+            _isTabFilled(tabName) {
+                const record = Store.findToday();
+                if (!record) return false;
+
+                if (tabName === 'main') {
+                    return !!(record.goal || record.victory || record.energy);
+                }
+                if (tabName === 'body') {
+                    return !!(record.body && (record.body.water || record.body.sleep || record.body.food || record.body
+                        .energy));
+                }
+                if (tabName === 'mind') {
+                    return !!(record.mind && (record.mind.mood || record.mind.stress || record.mind.gratitude));
+                }
+                if (tabName === 'work') {
+                    return !!(record.work && (record.work.goal || record.work.done || record.work.result));
+                }
+                if (tabName === 'soul') {
+                    return !!(record.soul && (record.soul.communication || record.soul.hobby || record.soul.loved));
+                }
+                return false;
+            },
+
+            // Обновление индикаторов и прогресса
+            _updateTabs() {
+                const tabs = ['main', 'body', 'mind', 'work', 'soul'];
+                let filled = 0;
+
+                tabs.forEach(tab => {
+                    const dot = document.getElementById(`dot-${tab}`);
+                    if (dot) {
+                        if (this._isTabFilled(tab)) {
+                            dot.className = 'status-dot filled';
+                            filled++;
+                        } else {
+                            dot.className = 'status-dot empty';
+                        }
+                    }
+                });
+
+                // Прогресс
+                const total = tabs.length;
+                const percent = (filled / total) * 100;
+                const fillEl = document.getElementById('progress-fill');
+                const textEl = document.getElementById('progress-text');
+                if (fillEl) fillEl.style.width = percent + '%';
+                if (textEl) textEl.textContent = `${filled}/${total}`;
+
+                // Если все 5 заполнены — блокируем день
+                if (filled === total) {
+                    const record = Store.findToday();
+                    if (record) {
+                        this._lockDay(record);
+                    }
+                } else {
+                    // Если не все — разблокируем
+                    this._unlockDay();
+                }
+            },
+
             load() {
                 const record = Store.findToday();
                 if (record) {
                     this._fillForm(record);
-                    this._lockDay(record);
+                    // Проверяем, все ли вкладки заполнены
+                    const total = 5;
+                    let filled = 0;
+                    ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
+                        if (this._isTabFilled(tab)) filled++;
+                    });
+                    if (filled === total) {
+                        this._lockDay(record);
+                    } else {
+                        this._unlockDay();
+                    }
                 } else {
                     this._unlockDay();
                     this._clearForm();
                 }
                 this._updateUI();
+                this._updateTabs();
             },
 
             _fillForm(record) {
@@ -2346,15 +2482,27 @@
 
             _unlockDay() {
                 this._mode = 'view';
-                document.getElementById('fields-wrapper').classList.remove('hidden');
+                // Показываем поля только если не все вкладки заполнены
+                const total = 5;
+                let filled = 0;
+                ['main', 'body', 'mind', 'work', 'soul'].forEach(tab => {
+                    if (this._isTabFilled(tab)) filled++;
+                });
+                if (filled < total) {
+                    document.getElementById('fields-wrapper').classList.remove('hidden');
+                } else {
+                    document.getElementById('fields-wrapper').classList.add('hidden');
+                }
                 document.getElementById('day-locked-banner').classList.remove('visible');
-                document.getElementById('today-status').textContent = '';
-                document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
-                    .forEach(el => el.disabled = false);
-                const btn = document.getElementById('save-btn');
-                btn.textContent = '💾 Сохранить день';
-                btn.disabled = false;
-                btn.className = 'btn-save';
+                document.getElementById('today-status').textContent = filled < total ? '' : '✅ Сохранено';
+                if (filled < total) {
+                    document.querySelectorAll('#sec-today .field-group input, #sec-today .field-group textarea, #sec-today .field-group select')
+                        .forEach(el => el.disabled = false);
+                    const btn = document.getElementById('save-btn');
+                    btn.textContent = '💾 Сохранить день';
+                    btn.disabled = false;
+                    btn.className = 'btn-save';
+                }
             },
 
             _clearForm() {
@@ -2482,12 +2630,15 @@
                     }
                 };
 
-                // Валидация — проверяем хоть что-то заполнено
-                const hasContent = record.goal || record.victory || record.body.food || record.mind.gratitude ||
-                    record.work.goal || record.soul.communication;
+                // Проверяем, есть ли хоть что-то во всех 5 вкладках
+                const hasMain = record.goal || record.victory || record.energy;
+                const hasBody = record.body.water || record.body.sleep || record.body.food || record.body.energy;
+                const hasMind = record.mind.mood || record.mind.stress || record.mind.gratitude;
+                const hasWork = record.work.goal || record.work.done || record.work.result;
+                const hasSoul = record.soul.communication || record.soul.hobby || record.soul.loved;
 
-                if (!hasContent && this._mode !== 'append') {
-                    Toast.show('⚠️ Заполните хотя бы одно поле', 'warning');
+                if (!hasMain && !hasBody && !hasMind && !hasWork && !hasSoul && this._mode !== 'append') {
+                    Toast.show('⚠️ Заполните хотя бы одну вкладку', 'warning');
                     return;
                 }
 
@@ -2509,7 +2660,6 @@
                             record[f] = existing[f] || '';
                         }
                     });
-                    // Дополняем поля в body, mind, work, soul
                     ['body', 'mind', 'work', 'soul'].forEach(section => {
                         Object.keys(record[section]).forEach(key => {
                             if (record[section][key] && existing[section] && existing[section][key]) {
@@ -2541,6 +2691,7 @@
                 this._mode = 'view';
                 this.load();
                 document.getElementById('streak-count').textContent = Store.getStreak();
+                this._updateTabs();
                 btn.textContent = '✅ Сохранено!';
                 setTimeout(() => {
                     btn.textContent = '💾 Сохранить день';
@@ -2593,21 +2744,18 @@
                     else insights.push(`📊 Энергия стабильна (${diff}% за неделю).`);
                 }
 
-                // Вода
                 const waterData = weekEntries.filter(e => e.body && e.body.water);
                 if (waterData.length > 3) {
                     const avgWater = waterData.reduce((s, e) => s + parseFloat(e.body.water), 0) / waterData.length;
                     insights.push(`💧 Средняя вода за неделю: ${avgWater.toFixed(1)} стаканов`);
                 }
 
-                // Сон
                 const sleepData = weekEntries.filter(e => e.body && e.body.sleep);
                 if (sleepData.length > 3) {
                     const avgSleep = sleepData.reduce((s, e) => s + parseFloat(e.body.sleep), 0) / sleepData.length;
                     insights.push(`😴 Средний сон за неделю: ${avgSleep.toFixed(1)} часов`);
                 }
 
-                // Стресс
                 const stressData = weekEntries.filter(e => e.mind && e.mind.stress);
                 if (stressData.length > 3) {
                     const avgStress = stressData.reduce((s, e) => s + parseFloat(e.mind.stress), 0) / stressData.length;
@@ -2653,19 +2801,15 @@
                     energyCount > 0 ? (totalEnergy / energyCount).toFixed(1) : '0.0';
                 document.getElementById('stat-goals-count').textContent = goalsCount;
 
-                // НОВЫЕ ГРАФИКИ
                 const sorted = [...entries].sort((a, b) => new Date(a.date) - new Date(b.date));
                 const labels = sorted.map(e => e.formattedDate.split(' ')[0] + ' ' + e.formattedDate.split(' ')[1]);
 
-                // 1. Вода
                 const waterData = sorted.map(e => e.body ? parseFloat(e.body.water) || 0 : 0);
                 this._renderChart('waterChart', labels, waterData, '#3b82f6', 'Вода (стаканы)');
 
-                // 2. Сон
                 const sleepData = sorted.map(e => e.body ? parseFloat(e.body.sleep) || 0 : 0);
                 this._renderChart('sleepChart', labels, sleepData, '#8b5cf6', 'Сон (часы)');
 
-                // 3. Настроение (числовое)
                 const moodMap = { '😊': 10, '😐': 6, '😢': 3, '😡': 1 };
                 const moodData = sorted.map(e => {
                     const mood = e.mind ? e.mind.mood : null;
@@ -2673,11 +2817,9 @@
                 });
                 this._renderChart('moodChart', labels, moodData, '#f59e0b', 'Настроение');
 
-                // 4. Стресс
                 const stressData = sorted.map(e => e.mind ? parseFloat(e.mind.stress) || 0 : 0);
                 this._renderChart('stressChart', labels, stressData, '#ef4444', 'Стресс');
 
-                // 5. Колесо баланса
                 this._renderBalanceChart();
             },
 
@@ -2686,7 +2828,6 @@
                 if (!ctx) return;
                 const canvas = ctx.getContext('2d');
 
-                // Уничтожаем старый график
                 if (this[`_${id}Chart`]) {
                     this[`_${id}Chart`].destroy();
                 }
@@ -2730,7 +2871,6 @@
                     this._balanceChart.destroy();
                 }
 
-                // Считаем средние значения по 4 сферам
                 let bodySum = 0,
                     bodyCount = 0;
                 let mindSum = 0,
@@ -2746,7 +2886,6 @@
                         bodyCount++;
                     }
                     if (e.mind && e.mind.stress) {
-                        // Инвертируем стресс для баланса (чем меньше стресс, тем лучше)
                         mindSum += 11 - parseFloat(e.mind.stress);
                         mindCount++;
                     }
@@ -2765,7 +2904,6 @@
                 const avgWork = workCount > 0 ? workSum / workCount : 5;
                 const avgSoul = soulCount > 0 ? 7 : 5;
 
-                // Нормализуем до 10
                 const normBody = Math.min(Math.max(avgBody, 1), 10);
                 const normMind = Math.min(Math.max(avgMind, 1), 10);
                 const normWork = Math.min(Math.max(avgWork, 1), 10);
@@ -3205,7 +3343,7 @@
                                 `<div class="victory-item">${v.victory} <span style="color:#94a3b8; font-size:10px;">— ${v.formattedDate}</span></div>`
                             ).join('') : '<div style="color:#94a3b8; font-size:12px;">Пока нет записанных побед</div>'}
                         </div>
-                        <div class="screenshot-footer">Сгенерировано в Life Dashboard v6.0</div>
+                        <div class="screenshot-footer">Сгенерировано в Life Dashboard v6.1</div>
                     `;
 
                     const sorted = entries.sort((a, b) => new Date(a.date) - new Date(b.date));
