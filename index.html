@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Трекер Целей & Аналитика</title>
+    <title>⚡ Трекер Целей & Голосовой Ввод</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -13,7 +13,6 @@
             --card-border: rgba(255, 255, 255, 0.08);
             --accent-primary: #6366f1;
             --accent-glow: rgba(99, 102, 241, 0.35);
-            --accent-pink: #ec4899;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --input-bg: rgba(15, 23, 42, 0.6);
@@ -46,7 +45,6 @@
             margin: 0 auto;
         }
 
-        /* HEADER */
         header {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -76,7 +74,6 @@
             font-weight: 600;
         }
 
-        /* NAVIGATION MENU */
         .nav-menu {
             display: flex;
             justify-content: center;
@@ -120,7 +117,6 @@
             display: block;
         }
 
-        /* CARD TODAY */
         .today-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -165,13 +161,45 @@
             margin-bottom: 16px;
         }
 
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
         .field-group label {
-            display: block;
             font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
-            margin-bottom: 6px;
             text-transform: uppercase;
+        }
+
+        .btn-mic {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid var(--accent-primary);
+            color: #a5b4fc;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-mic.recording {
+            background: #ef4444 !important;
+            color: #fff !important;
+            border-color: #ef4444 !important;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .field-group textarea {
@@ -202,11 +230,6 @@
             margin-top: 10px;
         }
 
-        .btn-save:active {
-            transform: scale(0.98);
-        }
-
-        /* STATS & HISTORY */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -311,14 +334,13 @@
             </div>
         </header>
 
-        <!-- MENU -->
         <nav class="nav-menu">
             <button class="nav-item active" onclick="openSection('today', this)">🔥 Сегодня</button>
             <button class="nav-item" onclick="openSection('stats', this)">📈 Статистика</button>
             <button class="nav-item" onclick="openSection('history', this)">📚 История</button>
         </nav>
 
-        <!-- SECTION 1: ТОЛЬКО СЕГОДНЯ -->
+        <!-- SECTION 1: TODAY -->
         <section id="sec-today" class="page-section active">
             <div class="today-card">
                 <div class="today-card-header">
@@ -330,19 +352,34 @@
                 </div>
 
                 <div class="field-group">
-                    <label>🎯 Главная цель дня</label>
+                    <div class="label-row">
+                        <label>🎯 Главная цель дня</label>
+                        <button class="btn-mic" onclick="startVoice('today-goal', this)">🎤 Продиктовать</button>
+                    </div>
                     <textarea id="today-goal" placeholder="Какую главную цель закрываем сегодня?"></textarea>
                 </div>
+
                 <div class="field-group">
-                    <label>🚫 Отказ дня</label>
+                    <div class="label-row">
+                        <label>🚫 Отказ дня</label>
+                        <button class="btn-mic" onclick="startVoice('today-refusal', this)">🎤 Продиктовать</button>
+                    </div>
                     <textarea id="today-refusal" placeholder="Чему сказал «нет»..."></textarea>
                 </div>
+
                 <div class="field-group">
-                    <label>💡 Главный урок / Инсайт</label>
+                    <div class="label-row">
+                        <label>💡 Главный урок / Инсайт</label>
+                        <button class="btn-mic" onclick="startVoice('today-lesson', this)">🎤 Продиктовать</button>
+                    </div>
                     <textarea id="today-lesson" placeholder="Что понял за сегодня..."></textarea>
                 </div>
+
                 <div class="field-group">
-                    <label>🔥 Слово дня</label>
+                    <div class="label-row">
+                        <label>🔥 Слово дня</label>
+                        <button class="btn-mic" onclick="startVoice('today-word', this)">🎤 Продиктовать</button>
+                    </div>
                     <textarea id="today-word" placeholder="Девиз или мысль дня..."></textarea>
                 </div>
 
@@ -350,7 +387,7 @@
             </div>
         </section>
 
-        <!-- SECTION 2: СТАТИСТИКА -->
+        <!-- SECTION 2: STATS -->
         <section id="sec-stats" class="page-section">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -377,7 +414,7 @@
             </div>
         </section>
 
-        <!-- SECTION 3: ИСТОРИЯ -->
+        <!-- SECTION 3: HISTORY -->
         <section id="sec-history" class="page-section">
             <div id="history-container" class="history-list"></div>
         </section>
@@ -385,8 +422,7 @@
 
     <script>
         let db = JSON.parse(localStorage.getItem('daily_goals_db')) || [];
-
-        const todayKey = new Date().toISOString().slice(0, 10); // Формат YYYY-MM-DD
+        const todayKey = new Date().toISOString().slice(0, 10);
         const formattedDate = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 
         let energyChartInstance = null;
@@ -395,6 +431,46 @@
         function init() {
             document.getElementById('today-date-display').innerText = `📅 Сегодня: ${formattedDate}`;
             loadTodayData();
+        }
+
+        /* ЛОГИКА ГОЛОСОВОГО ВВОДА */
+        function startVoice(targetId, btn) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                alert("К сожалению, твой браузер не поддерживает прямое распознавание речи. Воспользуйся стандартным диктовщиком на клавиатуре айфона (значок микрофона на клавиатуре).");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'ru-RU';
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                btn.classList.add('recording');
+                btn.innerHTML = '🔴 Слушаю...';
+            };
+
+            recognition.onresult = function(event) {
+                const text = event.results[0][0].transcript;
+                const textarea = document.getElementById(targetId);
+                if (textarea.value) {
+                    textarea.value += ' ' + text;
+                } else {
+                    textarea.value = text;
+                }
+            };
+
+            recognition.onerror = function(event) {
+                alert("Ошибка распознавания: " + event.error);
+            };
+
+            recognition.onend = function() {
+                btn.classList.remove('recording');
+                btn.innerHTML = '🎤 Продиктовать';
+            };
+
+            recognition.start();
         }
 
         function loadTodayData() {
@@ -458,7 +534,6 @@
             const labels = [];
             const energyValues = [];
 
-            // Сортируем по дате для красивого графика
             const sortedDb = [...db].sort((a, b) => new Date(a.date) - new Date(b.date));
 
             sortedDb.forEach(item => {
@@ -479,7 +554,6 @@
 
             document.getElementById('stat-avg-energy').innerText = energyCount > 0 ? (totalEnergy / energyCount).toFixed(1) : '0.0';
 
-            // 1. Круговой график
             const ctxDonut = document.getElementById('energyCategoryDonutChart').getContext('2d');
             if (energyCategoryDonutInstance) energyCategoryDonutInstance.destroy();
             energyCategoryDonutInstance = new Chart(ctxDonut, {
@@ -499,7 +573,6 @@
                 }
             });
 
-            // 2. Линейный график
             const ctxLine = document.getElementById('energyChart').getContext('2d');
             if (energyChartInstance) energyChartInstance.destroy();
             energyChartInstance = new Chart(ctxLine, {
